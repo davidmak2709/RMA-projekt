@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "381731811548",
+    "firebase_url": "https://esports-719c4.firebaseio.com",
+    "project_id": "esports-719c4",
+    "storage_bucket": "esports-719c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381731811548:android:cb730d32da6d55a1",
+        "android_client_info": {
+          "package_name": "hr.helloworld.david.esports"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381731811548-gaqpbs5qkqqgbol4knuqsuf3thdjcsc4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hr.helloworld.david.esports",
+            "certificate_hash": "9641bb519e682c571870c53fbf2939ac9109fbe1"
+          }
+        },
+        {
+          "client_id": "381731811548-2s455ajk4puim3j6bfdfe9gisv47png0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7DUDMmgvekm1N7y1VkcOfb_1tabRsSKo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381731811548-2s455ajk4puim3j6bfdfe9gisv47png0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

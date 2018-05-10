@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Esports</string>
+    <!-- Start Activity strings -->
+    <string name="StartActivityEmailTextView">E-mail: </string>
+    <string name="StartActivityPasswordTextView">Lozinka: </string>
+    <string name="StartActivityLoginButtonLabel">Prijavi se</string>
+    <string name="StartActivitySignUpButtonLabel">Registracija</string>
+
+    <!-- Sign Up Activity strings-->
+    <string name="SignUpActivityUsernameTextView">Username: </string>
+    <string name="SignUpActivityEmailTextView">E-mail:</string>
+    <string name="SignUpActivityPasswordTextView">Lozinka: </string>
+    <string name="SignUpActivityRePasswordTextView">Ponovi lozinku: </string>
+    <string name="SignUpActivityCreateAccountButton">Kreni</string>
+    <string name="SignUpActivityImageSelect">Izaberi profilnu sliku: </string>
+    <string name="SignUpActivityImageSelectDescription">Click za izbor</string>
+
+    <!-- Shared Prefs Keys -->
+    <string name="userID">userID</string>
+    <string name="username">uName</string>
+
+    <string name="facebook_app_id">601771230202732</string>
+
+</resources>

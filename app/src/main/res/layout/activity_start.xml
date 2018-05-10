@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fb="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hr.helloworld.david.esports.StartActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="0.65">
+
+
+            <TextView
+                android:id="@+id/StartActivityEmailTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:text="@string/StartActivityEmailTextView" />
+
+            <EditText
+                android:id="@+id/StartActivityEmailEditView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:text="@string/StartActivityPasswordTextView" />
+
+            <EditText
+                android:id="@+id/StartActivityPasswordEditView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30sp" />
+
+            <Button
+                android:id="@+id/StartActivityLoginButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/StartActivityLoginButtonLabel" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15sp" />
+
+            <Button
+                android:id="@+id/StartActivitySignUpButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/StartActivitySignUpButtonLabel" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/BottomLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:weightSum="1"
+            android:layout_weight="0.25">
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/StartActivityGoogleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/StartActivityFacebookButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/com_facebook_button_background"
+                android:drawableLeft="@drawable/com_facebook_button_icon"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
