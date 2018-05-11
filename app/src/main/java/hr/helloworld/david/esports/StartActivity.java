@@ -172,8 +172,6 @@ public class StartActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            User.setCurrentUserInfo(user.getUid());
-
 
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);

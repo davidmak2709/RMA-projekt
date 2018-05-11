@@ -45,23 +45,6 @@ public class User {
 
     }
 
-    public static void setCurrentUserInfo(final String UUID){
-       final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-       Query query = databaseReference.orderByChild("uuid").equalTo(UUID);
-
-       query.addListenerForSingleValueEvent(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO POSTAVI SVE POTREBNE PODATKE
-
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-
-           }
-       });
-    }
 
 
 }

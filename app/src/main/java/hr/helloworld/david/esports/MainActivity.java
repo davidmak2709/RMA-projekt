@@ -1,6 +1,7 @@
 package hr.helloworld.david.esports;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,14 +22,21 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.imageView);
         Button signOut = findViewById(R.id.button2);
+        Uri imageUri = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
 
-
-        Picasso.with(getApplicationContext())
-                .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
-                .resize(100, 100)
-                .centerCrop()
-                .into(imageView);
-
+        if (imageUri != null) {
+            Picasso.with(getApplicationContext())
+                    .load(imageUri)
+                    .resize(300, 300)
+                    .centerCrop()
+                    .into(imageView);
+        } else {
+            Picasso.with(getApplicationContext())
+                    .load(R.mipmap.ic_launcher)
+                    .resize(300, 300)
+                    .centerCrop()
+                    .into(imageView);
+        }
         signOut.setText("Sign Out");
 
 

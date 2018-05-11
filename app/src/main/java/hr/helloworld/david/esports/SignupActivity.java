@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +39,6 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private Uri selectedImage;
-    private Uri uploadedImageUri;
 
 
     private static int RESULT_LOAD_IMAGE = 1;
@@ -113,13 +113,17 @@ public class SignupActivity extends AppCompatActivity {
                         firebaseUser = authResult.getUser();
 
                         FirebaseStorage storage = FirebaseStorage.getInstance();
-                        StorageReference storageReference = storage.getReference().child("profile_picture/" + firebaseUser.getUid());
+                        StorageReference storageReference = storage.getReference();
 
-                        storageReference.putFile(selectedImage)
+                        storageReference.child("profile_picture/123").putFile(selectedImage)
                                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
+                                        if (task.isSuccessful()) {
+                                            Log.d("Firebase Storage: ", "USPJESNO");
+                                        } else {
+                                            Log.d("Firebase Storage: ", "NEUSPJESNO");
+                                        }
                                     }
                                 });
 
@@ -135,10 +139,12 @@ public class SignupActivity extends AppCompatActivity {
         StorageReference storageReference = storage.getReference();
 
 
-        storageReference.child("profile_picture/" + firebaseUser.getUid()).getDownloadUrl()
+        storageReference.child("profile_picture/123").getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        Log.d("Firebase Storage(URL): ", "USPJESNO");
+
                         User user = new User(firebaseUser.getUid(), usernameEditText.getText().toString(),
                                 emailEditText.getText().toString(), uri);
 
