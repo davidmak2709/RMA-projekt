@@ -7,14 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +25,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Objects;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -55,17 +52,12 @@ public class SignupActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
 
 
-        profileImageView =  findViewById(R.id.SignUpActivityImageSelector);
+        profileImageView = findViewById(R.id.SignUpActivityImageSelector);
         usernameEditText = findViewById(R.id.SignUpActivityUsernameEditView);
         emailEditText = findViewById(R.id.SignUpActivityEmailEditView);
         pwdEditText = findViewById(R.id.SignUpActivityPasswordEditView);
         rpwdEditText = findViewById(R.id.SignUpActivityRePasswordEditView);
         continueButton = findViewById(R.id.SignUpActivityCreateAccountButton);
-
-        pwdEditText.setText("1234567");
-        rpwdEditText.setText("1234567");
-        usernameEditText.setText("david");
-        emailEditText.setText("david@gmail.com");
 
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +72,10 @@ public class SignupActivity extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validateForm()){
+                if (validateForm()) {
                     createNewUser();
-                    //TODO reci di cemo nastaviti i provjeri ako je uspjesno kreiran
-//                    Intent intent = new Intent(SignupActivity.this,MainActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -105,8 +96,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    private void createNewUser(){
-        if(!validateForm()){
+    private void createNewUser() {
+        if (!validateForm()) {
             return;
         }
 
@@ -114,75 +105,71 @@ public class SignupActivity extends AppCompatActivity {
         String password = pwdEditText.getText().toString();
 
 
-        firebaseAuth.createUserWithEmailAndPassword(email,password)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                                signInUser();
-                                firebaseUser = authResult.getUser();
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        signInUser();
+                        firebaseUser = authResult.getUser();
 
-                                FirebaseStorage storage = FirebaseStorage.getInstance();
-                                StorageReference storageReference = storage.getReference().child("profile_picture/"+ firebaseUser.getUid());
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageReference = storage.getReference().child("profile_picture/" + firebaseUser.getUid());
 
-                                storageReference.putFile(selectedImage)
-                                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        storageReference.putFile(selectedImage)
+                                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                                        }
-                                    });
-                                setUserInfo();
-                        }
+                                    }
+                                });
+
+                        setUserInfo();
+                    }
                 });
 
     }
 
-    private void setUserInfo(){
+    private void setUserInfo() {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference().child("profile_picture/"+ firebaseUser.getUid());
-
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                uploadedImageUri = uri;
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("jebem ti mater:::",e.getMessage());
-            }
-        });
+        StorageReference storageReference = storage.getReference();
 
 
+        storageReference.child("profile_picture/" + firebaseUser.getUid()).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        User user = new User(firebaseUser.getUid(), usernameEditText.getText().toString(),
+                                emailEditText.getText().toString(), uri);
 
-        User user = new User(firebaseUser.getUid(),usernameEditText.getText().toString(),
-                emailEditText.getText().toString(),uploadedImageUri);
-
-        user.saveNewUser();
+                        user.saveNewUser();
 
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().
-                setDisplayName(usernameEditText.getText().toString()).
-                setPhotoUri(uploadedImageUri).build();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().
+                                setDisplayName(usernameEditText.getText().toString()).
+                                setPhotoUri(uri).build();
 
-        firebaseUser.updateProfile(profileUpdates).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignupActivity.this, e.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
+                        firebaseUser.updateProfile(profileUpdates).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+
+
     }
 
-    private void signInUser(){
+    private void signInUser() {
         String email = emailEditText.getText().toString();
         String password = pwdEditText.getText().toString();
 
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this,
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             //TODO nastvi ovdje ili gore
                         } else {
                             Toast.makeText(SignupActivity.this, task.getException().getMessage(),
@@ -192,7 +179,7 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
-    private boolean validateForm(){
+    private boolean validateForm() {
         boolean valid = true;
 
 
@@ -222,18 +209,18 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         String rpwd = rpwdEditText.getText().toString();
-        if (rpwd.matches("")){
+        if (rpwd.matches("")) {
             rpwdEditText.setError("Required.");
             valid = false;
         } else {
             rpwdEditText.setError(null);
         }
 
-        if(!TextUtils.equals(pwd,rpwd)){
+        if (!TextUtils.equals(pwd, rpwd)) {
             rpwdEditText.setError("Must be equal.");
             pwdEditText.setError("Must be equal.");
             valid = false;
-        }  else if (pwd.length() < 6 || rpwd.length() < 6){
+        } else if (pwd.length() < 6 || rpwd.length() < 6) {
             rpwdEditText.setError("Min 6 char.");
             pwdEditText.setError("Min 6 char.");
             valid = false;

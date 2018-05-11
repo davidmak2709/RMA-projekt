@@ -70,18 +70,17 @@ public class StartActivity extends AppCompatActivity {
 
 
         /*
-        *   provjera ako je korinsik već logiran
-        */
-        if(firebaseUser != null){
-            //TODO ako je korisnik već logiran na uređaju prebaci ga na main activity
-            Intent intent = new Intent(StartActivity.this,MainActivity.class);
+         *   provjera ako je korinsik već logiran
+         */
+        if (firebaseUser != null) {
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
         }
 
         emailEditView = findViewById(R.id.StartActivityEmailEditView);
         pwdEditView = findViewById(R.id.StartActivityPasswordEditView);
 
-           Button loginButton = findViewById(R.id.StartActivityLoginButton);
+        Button loginButton = findViewById(R.id.StartActivityLoginButton);
         Button signupButton = findViewById(R.id.StartActivitySignUpButton);
 
         SignInButton googleButton = findViewById(R.id.StartActivityGoogleButton);
@@ -90,7 +89,7 @@ public class StartActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StartActivity.this,SignupActivity.class);
+                Intent intent = new Intent(StartActivity.this, SignupActivity.class);
                 startActivity(intent);
             }
         });
@@ -110,7 +109,6 @@ public class StartActivity extends AppCompatActivity {
         };
 
 
-
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +118,7 @@ public class StartActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         LoginButton facebookButton = findViewById(R.id.StartActivityFacebookButton);
-        facebookButton.setReadPermissions("email","public_profile");
+        facebookButton.setReadPermissions("email", "public_profile");
         facebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -134,7 +132,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 String e = "Failed to login. " + error.getMessage();
-                Toast.makeText(StartActivity.this,e,Toast.LENGTH_LONG).show();
+                Toast.makeText(StartActivity.this, e, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -151,18 +149,18 @@ public class StartActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Log.w(GOOGLE_TAG, "Google sign in failed", e);
+                Log.w(GOOGLE_TAG, "Google sign in failed" + e.getMessage());
 
             }
-        }else if(CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode() == requestCode){
+        } else if (CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode() == requestCode) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private boolean logInUser(){
+    private boolean logInUser() {
         String mail = emailEditView.getText().toString();
         String pwd = pwdEditView.getText().toString();
-        if(!validateForm()){
+        if (!validateForm()) {
             return false;
         }
 
@@ -177,18 +175,17 @@ public class StartActivity extends AppCompatActivity {
                             User.setCurrentUserInfo(user.getUid());
 
 
-
-                            Intent intent = new Intent(StartActivity.this,MainActivity.class);
+                            Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
 
                         } else {
                             Exception exception = task.getException();
-                            if(exception instanceof FirebaseAuthInvalidCredentialsException){
+                            if (exception instanceof FirebaseAuthInvalidCredentialsException) {
                                 LinearLayout linearLayout = findViewById(R.id.BottomLinearLayout);
-                                Snackbar.make(linearLayout,"Zaboravljena lozinka?",
+                                Snackbar.make(linearLayout, "Zaboravljena lozinka?",
                                         Snackbar.LENGTH_LONG).setAction("Reset",
-                                            sendMailListener).setActionTextColor(Color.RED).show();
-                            }else {
+                                        sendMailListener).setActionTextColor(Color.RED).show();
+                            } else {
                                 Toast.makeText(StartActivity.this, exception.getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
@@ -216,20 +213,19 @@ public class StartActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(pwd)) {
             pwdEditView.setError("Required.");
             valid = false;
-        }else if(pwd.length() < 6){
+        } else if (pwd.length() < 6) {
             pwdEditView.setError("Too short.");
             valid = false;
-        }
-        else {
+        } else {
             pwdEditView.setError(null);
         }
 
         return valid;
     }
 
-    private void resetPassword(){
+    private void resetPassword() {
         String mail = emailEditView.getText().toString();
-        if(mail != "") {
+        if (mail != "") {
             firebaseAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -246,7 +242,7 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private void signInWithGoogle(){
+    private void signInWithGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -268,16 +264,16 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Snackbar.make(findViewById(R.id.BottomLinearLayout),"signInWithCredential:success",
+                            Snackbar.make(findViewById(R.id.BottomLinearLayout), "signInWithCredential:success",
                                     Snackbar.LENGTH_LONG).show();
 
                             firebaseUser = firebaseAuth.getCurrentUser();
                             User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
-                                    firebaseUser.getEmail(),firebaseUser.getPhotoUrl());
+                                    firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
 
                             user.saveNewUser();
 
-                            Intent intent = new Intent(StartActivity.this,MainActivity.class);
+                            Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
                             Snackbar.make(findViewById(R.id.BottomLinearLayout), "Authentication Failed.",
@@ -297,11 +293,11 @@ public class StartActivity extends AppCompatActivity {
 
                             firebaseUser = firebaseAuth.getCurrentUser();
                             User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
-                                    firebaseUser.getEmail(),firebaseUser.getPhotoUrl());
+                                    firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
 
                             user.saveNewUser();
 
-                            Intent intent = new Intent(StartActivity.this,MainActivity.class);
+                            Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(StartActivity.this, "Authentication failed.",
