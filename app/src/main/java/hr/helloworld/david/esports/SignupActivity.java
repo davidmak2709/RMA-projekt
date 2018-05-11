@@ -74,8 +74,6 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (validateForm()) {
                     createNewUser();
-                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                    startActivity(intent);
                 }
             }
         });
@@ -115,19 +113,25 @@ public class SignupActivity extends AppCompatActivity {
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference storageReference = storage.getReference();
 
-                        storageReference.child("profile_picture/123").putFile(selectedImage)
+                        storageReference.child("profile_picture/" + firebaseUser.getUid()).putFile(selectedImage)
                                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             Log.d("Firebase Storage: ", "USPJESNO");
+                                            setUserInfo();
+
+
+                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                            startActivity(intent);
+
                                         } else {
                                             Log.d("Firebase Storage: ", "NEUSPJESNO");
                                         }
                                     }
                                 });
 
-                        setUserInfo();
+
                     }
                 });
 
@@ -139,7 +143,7 @@ public class SignupActivity extends AppCompatActivity {
         StorageReference storageReference = storage.getReference();
 
 
-        storageReference.child("profile_picture/123").getDownloadUrl()
+        storageReference.child("profile_picture/" + firebaseUser.getUid()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
