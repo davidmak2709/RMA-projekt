@@ -15,8 +15,9 @@ import java.util.List;
 
 public class User {
 
-    private String UUID;
+    private String uuid;
     private String username;
+    private String searchUsername;
     private String email;
     private Uri photoUrl;
 
@@ -24,8 +25,8 @@ public class User {
 
     }
 
-    public User(String UUID,String username, String email,Uri photoUrl){
-        this.UUID = UUID;
+    public User(String uuid, String username, String email, Uri photoUrl) {
+        this.uuid = uuid;
         this.username = username;
         this.email = email;
         this.photoUrl =photoUrl;
@@ -35,16 +36,54 @@ public class User {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
 
-        databaseReference.child(this.UUID).child("uuid").setValue(this.UUID);
-        databaseReference.child(this.UUID).child("username").setValue(this.username);
-        databaseReference.child(this.UUID).child("email").setValue(this.email);
+        databaseReference.child(this.uuid).child("uuid").setValue(this.uuid);
+        databaseReference.child(this.uuid).child("username").setValue(this.username);
+        databaseReference.child(this.uuid).child("searchUsername").setValue(this.username.toLowerCase());
+        databaseReference.child(this.uuid).child("email").setValue(this.email);
 
         if(this.photoUrl != null){
-            databaseReference.child(this.UUID).child("photoUrl").setValue(photoUrl.toString());
+            databaseReference.child(this.uuid).child("photoUrl").setValue(photoUrl.toString());
         }
 
     }
 
+    public String getuuid() {
+        return uuid;
+    }
 
+    public void setuuid(String uuid) {
+        this.uuid = uuid;
+    }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSearchUsername() {
+        return searchUsername;
+    }
+
+    public void setSearchUsername(String searchUsername) {
+        this.searchUsername = searchUsername;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Uri getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(Uri photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }
