@@ -1,5 +1,6 @@
 package hr.helloworld.david.esports;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.net.Uri;
@@ -34,7 +35,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText pwdEditText;
     private EditText rpwdEditText;
-    private Button continueButton;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -57,7 +57,7 @@ public class SignupActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.SignUpActivityEmailEditView);
         pwdEditText = findViewById(R.id.SignUpActivityPasswordEditView);
         rpwdEditText = findViewById(R.id.SignUpActivityRePasswordEditView);
-        continueButton = findViewById(R.id.SignUpActivityCreateAccountButton);
+        Button continueButton = findViewById(R.id.SignUpActivityCreateAccountButton);
 
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +99,14 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+        //TODO poboljšati ga trenutno radi ali nije nesto
+        ProgressDialog dialog = new ProgressDialog(SignupActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Loading. Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         String email = emailEditText.getText().toString();
         String password = pwdEditText.getText().toString();
 
@@ -120,13 +128,10 @@ public class SignupActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Log.d("Firebase Storage: ", "USPJESNO");
                                             setUserInfo();
-
-
-                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                            startActivity(intent);
-
                                         } else {
                                             Log.d("Firebase Storage: ", "NEUSPJESNO");
+                                            Toast.makeText(SignupActivity.this, "Firebase Storage: Neuspješno spremanje",
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -134,6 +139,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     }
                 });
+
 
     }
 
@@ -159,7 +165,13 @@ public class SignupActivity extends AppCompatActivity {
                                 setDisplayName(usernameEditText.getText().toString()).
                                 setPhotoUri(uri).build();
 
-                        firebaseUser.updateProfile(profileUpdates).addOnFailureListener(new OnFailureListener() {
+                        firebaseUser.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -167,8 +179,6 @@ public class SignupActivity extends AppCompatActivity {
                         });
                     }
                 });
-
-
     }
 
     private void signInUser() {
@@ -179,9 +189,7 @@ public class SignupActivity extends AppCompatActivity {
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //TODO nastvi ovdje ili gore
-                        } else {
+                        if (!task.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
@@ -241,4 +249,5 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
+
 }
