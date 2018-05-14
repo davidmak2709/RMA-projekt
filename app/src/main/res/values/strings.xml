@@ -19,6 +19,10 @@
     <string name="SearchActivitySearchEditViewHint">Pretraži Esport</string>
 
 
+    <!-- Main Activity Drawer strings -->
+    <string name="navMenuLogOutString">Odjavi se</string>
+    <string name="navMenuEditProfileString">Uredi profil</string>
+
     <!-- Shared Prefs Keys -->
     <string name="userID">userID</string>
     <string name="username">uName</string>

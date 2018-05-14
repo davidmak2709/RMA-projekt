@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:weightSum="1"
@@ -13,10 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.15"
-        android:gravity="center"
-        android:background="@color/com_facebook_button_like_background_color_selected"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarSearchActivity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/AppTheme" />
 
     </LinearLayout>
 
@@ -47,7 +54,7 @@
         <ListView
             android:id="@+id/userList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

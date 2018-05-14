@@ -121,6 +121,9 @@ public class SignupActivity extends AppCompatActivity {
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference storageReference = storage.getReference();
 
+                        if (selectedImage == null)
+                            selectedImage = Uri.parse("android.resource://" + SignupActivity.this.getPackageName() + "/mipmap/ic_launcher");
+
                         storageReference.child("profile_picture/" + firebaseUser.getUid()).putFile(selectedImage)
                                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -170,6 +173,7 @@ public class SignupActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                                 startActivity(intent);
+                                finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

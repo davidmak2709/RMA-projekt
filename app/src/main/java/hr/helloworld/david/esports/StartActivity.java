@@ -75,6 +75,7 @@ public class StartActivity extends AppCompatActivity {
         if (firebaseUser != null) {
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
         emailEditView = findViewById(R.id.StartActivityEmailEditView);
@@ -175,6 +176,7 @@ public class StartActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
 
                         } else {
                             Exception exception = task.getException();
@@ -273,6 +275,7 @@ public class StartActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             Snackbar.make(findViewById(R.id.BottomLinearLayout), "Authentication Failed.",
                                     Snackbar.LENGTH_SHORT).show();
@@ -297,6 +300,7 @@ public class StartActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             Toast.makeText(StartActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
