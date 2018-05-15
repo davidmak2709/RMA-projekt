@@ -39,6 +39,8 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private Uri selectedImage;
 
+    private ProgressDialog dialog;
+
 
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -98,8 +100,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        //TODO poboljšati ga, trenutno radi ali nije nesto (i kod je tragedija)
-        ProgressDialog dialog = new ProgressDialog(SignupActivity.this);
+        dialog = new ProgressDialog(SignupActivity.this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage("Loading. Please wait...");
         dialog.setIndeterminate(true);
@@ -131,6 +132,7 @@ public class SignupActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             setUserInfo();
                                         } else {
+                                            dialog.cancel();
                                             Toast.makeText(SignupActivity.this, "Firebase Storage: Neuspješno spremanje",
                                                     Toast.LENGTH_LONG).show();
                                         }
@@ -175,6 +177,7 @@ public class SignupActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                dialog.cancel();
                                 Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -191,6 +194,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful() && task.getException() != null) {
+                            dialog.cancel();
                             Toast.makeText(SignupActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }

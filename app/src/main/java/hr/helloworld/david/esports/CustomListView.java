@@ -21,7 +21,7 @@ public class CustomListView extends ArrayAdapter<String> {
     private ArrayList<String> usernames;
     private Activity context;
 
-    public CustomListView(Activity context, ArrayList<String> urls, ArrayList<String> usernames) {
+    CustomListView(Activity context, ArrayList<String> urls, ArrayList<String> usernames) {
         super(context, R.layout.listview, usernames);
 
         this.urls = urls;

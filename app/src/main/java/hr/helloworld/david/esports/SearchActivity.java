@@ -1,6 +1,7 @@
 package hr.helloworld.david.esports;
 
-
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -64,7 +66,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0)
-                    searchForUser(s.toString());
+                    new GetData().execute(s.toString());
             }
 
             @Override
@@ -75,42 +77,50 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void searchForUser(final String searchString) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final DatabaseReference database = firebaseDatabase.getReference("users");
-        Query query = database.orderByChild("searchUsername")
-                .startAt(searchString)
-                .limitToFirst(10);
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> urls = new ArrayList<>();
-                ArrayList<String> usernames = new ArrayList<>();
+    @SuppressLint("StaticFieldLeak")
+    private class GetData extends AsyncTask<String, Void, Void> {
 
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.child("searchUsername").exists() &&
-                            snapshot.child("searchUsername")
-                                    .getValue(String.class).startsWith(searchString)) {
+        @Override
+        protected Void doInBackground(final String... strings) {
 
-                        usernames.add(snapshot.child("username").getValue(String.class));
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            final DatabaseReference database = firebaseDatabase.getReference("users");
+            Query query = database.orderByChild("searchUsername")
+                    .startAt(strings[0])
+                    .limitToFirst(10);
 
-                        if (snapshot.child("photoUrl").exists())
-                            urls.add(snapshot.child("photoUrl").getValue(String.class));
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<String> urls = new ArrayList<>();
+                    ArrayList<String> userNames = new ArrayList<>();
+
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.child("searchUsername").exists() &&
+                                Objects.requireNonNull(snapshot.child("searchUsername")
+                                        .getValue(String.class)).startsWith(strings[0])) {
+
+                            userNames.add(snapshot.child("username").getValue(String.class));
+
+                            if (snapshot.child("photoUrl").exists())
+                                urls.add(snapshot.child("photoUrl").getValue(String.class));
+                        }
                     }
+
+                    CustomListView customListView = new CustomListView(SearchActivity.this, urls, userNames);
+                    usersList.setAdapter(customListView);
+
                 }
 
-                CustomListView customListView = new CustomListView(SearchActivity.this, urls, usernames);
-                usersList.setAdapter(customListView);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
+            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+            return null;
+        }
     }
 }
