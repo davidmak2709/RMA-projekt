@@ -10,6 +10,7 @@
     <string name="StartActivitySignUpButtonLabel">Registracija</string>
 
     <!-- Sign Up Activity strings-->
+    <string name="SignUpActivityDialogString">Obrada i spremanje podataka… Pričekajte!</string>
     <string name="SignUpActivityUsernameTextView">Username: </string>
     <string name="SignUpActivityEmailTextView">E-mail:</string>
     <string name="SignUpActivityPasswordTextView">Lozinka: </string>

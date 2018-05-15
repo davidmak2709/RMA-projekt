@@ -102,9 +102,10 @@ public class SignupActivity extends AppCompatActivity {
 
         dialog = new ProgressDialog(SignupActivity.this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Loading. Please wait...");
+        dialog.setMessage(getResources().getString(R.string.SignUpActivityDialogString));
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
 
         String email = emailEditText.getText().toString();
@@ -131,17 +132,20 @@ public class SignupActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             setUserInfo();
-                                        } else {
-                                            dialog.cancel();
-                                            Toast.makeText(SignupActivity.this, "Firebase Storage: Neuspješno spremanje",
-                                                    Toast.LENGTH_LONG).show();
+                                        } else if (task.getException() != null) {
+                                            createUserError(task.getException());
                                         }
                                     }
                                 });
 
 
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                createUserError(e);
+            }
+        });
 
 
     }
@@ -177,12 +181,16 @@ public class SignupActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                dialog.cancel();
-                                Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                createUserError(e);
                             }
                         });
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                createUserError(e);
+            }
+        });
     }
 
     private void signInUser() {
@@ -194,12 +202,16 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful() && task.getException() != null) {
-                            dialog.cancel();
-                            Toast.makeText(SignupActivity.this, task.getException().getMessage(),
-                                    Toast.LENGTH_LONG).show();
+                            createUserError(task.getException());
                         }
                     }
                 });
+    }
+
+    private void createUserError(Exception e) {
+        dialog.cancel();
+        Toast.makeText(SignupActivity.this, e.getMessage(),
+                Toast.LENGTH_LONG).show();
     }
 
     private boolean validateForm() {
