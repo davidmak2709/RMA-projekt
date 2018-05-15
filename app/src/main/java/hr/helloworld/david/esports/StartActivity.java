@@ -52,9 +52,6 @@ public class StartActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-
-
-    private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager callbackManager;
 
     private View.OnClickListener sendMailListener;
@@ -158,11 +155,11 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private boolean logInUser() {
+    private void logInUser() {
         String mail = emailEditView.getText().toString();
         String pwd = pwdEditView.getText().toString();
         if (!validateForm()) {
-            return false;
+            return;
         }
 
 
@@ -171,9 +168,6 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -185,7 +179,7 @@ public class StartActivity extends AppCompatActivity {
                                 Snackbar.make(linearLayout, "Zaboravljena lozinka?",
                                         Snackbar.LENGTH_LONG).setAction("Reset",
                                         sendMailListener).setActionTextColor(Color.RED).show();
-                            } else {
+                            } else if (exception != null) {
                                 Toast.makeText(StartActivity.this, exception.getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
@@ -195,7 +189,6 @@ public class StartActivity extends AppCompatActivity {
                 });
 
 
-        return true;
     }
 
     private boolean validateForm() {
@@ -225,7 +218,7 @@ public class StartActivity extends AppCompatActivity {
 
     private void resetPassword() {
         String mail = emailEditView.getText().toString();
-        if (mail != "") {
+        if (mail.equals("")) {
             firebaseAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -248,7 +241,7 @@ public class StartActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -268,11 +261,12 @@ public class StartActivity extends AppCompatActivity {
                                     Snackbar.LENGTH_LONG).show();
 
                             firebaseUser = firebaseAuth.getCurrentUser();
-                            User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
-                                    firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
+                            if (firebaseUser != null) {
+                                User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
+                                        firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
 
-                            user.saveNewUser();
-
+                                user.saveNewUser();
+                            }
                             Intent intent = new Intent(StartActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -290,9 +284,10 @@ public class StartActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                        firebaseUser = firebaseAuth.getCurrentUser();
+                        if (task.isSuccessful() && firebaseUser != null) {
 
-                            firebaseUser = firebaseAuth.getCurrentUser();
+
                             User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
                                     firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
 

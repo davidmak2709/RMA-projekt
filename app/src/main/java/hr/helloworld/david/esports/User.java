@@ -1,17 +1,8 @@
 package hr.helloworld.david.esports;
 
 import android.net.Uri;
-import android.support.constraint.solver.widgets.Snapshot;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class User {
 
@@ -21,8 +12,7 @@ public class User {
     private String email;
     private Uri photoUrl;
 
-    public User(){
-
+    public User() {
     }
 
     public User(String uuid, String username, String email, Uri photoUrl) {

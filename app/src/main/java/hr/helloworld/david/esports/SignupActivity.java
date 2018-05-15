@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText emailEditText;
     private EditText pwdEditText;
-    private EditText rpwdEditText;
+    private EditText resetPwdEditText;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -56,7 +55,7 @@ public class SignupActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.SignUpActivityUsernameEditView);
         emailEditText = findViewById(R.id.SignUpActivityEmailEditView);
         pwdEditText = findViewById(R.id.SignUpActivityPasswordEditView);
-        rpwdEditText = findViewById(R.id.SignUpActivityRePasswordEditView);
+        resetPwdEditText = findViewById(R.id.SignUpActivityRePasswordEditView);
         Button continueButton = findViewById(R.id.SignUpActivityCreateAccountButton);
 
         profileImageView.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        //TODO poboljšati ga trenutno radi ali nije nesto
+        //TODO poboljšati ga, trenutno radi ali nije nesto (i kod je tragedija)
         ProgressDialog dialog = new ProgressDialog(SignupActivity.this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage("Loading. Please wait...");
@@ -124,15 +123,14 @@ public class SignupActivity extends AppCompatActivity {
                         if (selectedImage == null)
                             selectedImage = Uri.parse("android.resource://" + SignupActivity.this.getPackageName() + "/mipmap/ic_launcher");
 
-                        storageReference.child("profile_picture/" + firebaseUser.getUid()).putFile(selectedImage)
+                        storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
+                                + firebaseUser.getUid()).putFile(selectedImage)
                                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                         if (task.isSuccessful()) {
-                                            Log.d("Firebase Storage: ", "USPJESNO");
                                             setUserInfo();
                                         } else {
-                                            Log.d("Firebase Storage: ", "NEUSPJESNO");
                                             Toast.makeText(SignupActivity.this, "Firebase Storage: Neuspješno spremanje",
                                                     Toast.LENGTH_LONG).show();
                                         }
@@ -152,12 +150,11 @@ public class SignupActivity extends AppCompatActivity {
         StorageReference storageReference = storage.getReference();
 
 
-        storageReference.child("profile_picture/" + firebaseUser.getUid()).getDownloadUrl()
+        storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
+                + firebaseUser.getUid()).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.d("Firebase Storage(URL): ", "USPJESNO");
-
                         User user = new User(firebaseUser.getUid(), usernameEditText.getText().toString(),
                                 emailEditText.getText().toString(), uri);
 
@@ -193,7 +190,7 @@ public class SignupActivity extends AppCompatActivity {
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
+                        if (!task.isSuccessful() && task.getException() != null) {
                             Toast.makeText(SignupActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
@@ -230,24 +227,24 @@ public class SignupActivity extends AppCompatActivity {
             pwdEditText.setError(null);
         }
 
-        String rpwd = rpwdEditText.getText().toString();
+        String rpwd = resetPwdEditText.getText().toString();
         if (rpwd.matches("")) {
-            rpwdEditText.setError("Required.");
+            resetPwdEditText.setError("Required.");
             valid = false;
         } else {
-            rpwdEditText.setError(null);
+            resetPwdEditText.setError(null);
         }
 
         if (!TextUtils.equals(pwd, rpwd)) {
-            rpwdEditText.setError("Must be equal.");
+            resetPwdEditText.setError("Must be equal.");
             pwdEditText.setError("Must be equal.");
             valid = false;
         } else if (pwd.length() < 6 || rpwd.length() < 6) {
-            rpwdEditText.setError("Min 6 char.");
+            resetPwdEditText.setError("Min 6 char.");
             pwdEditText.setError("Min 6 char.");
             valid = false;
         } else {
-            rpwdEditText.setError(null);
+            resetPwdEditText.setError(null);
             pwdEditText.setError(null);
         }
 

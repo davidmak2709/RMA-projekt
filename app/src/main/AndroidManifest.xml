@@ -16,11 +16,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -38,7 +36,6 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
-
         <activity android:name=".MapActivity" />
 
         <receiver
@@ -64,8 +61,7 @@
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
+        <activity android:name=".EditProfileActivity" />
     </application>
 
 </manifest>

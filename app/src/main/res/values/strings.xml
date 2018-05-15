@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Esports</string>
+
+    <string name="FirebaseStorageProfilePictureFolder">profile_picture/</string>
+
     <!-- Start Activity strings -->
     <string name="StartActivityEmailTextView">E-mail: </string>
     <string name="StartActivityPasswordTextView">Lozinka: </string>
@@ -23,6 +26,15 @@
     <string name="navMenuLogOutString">Odjavi se</string>
     <string name="navMenuEditProfileString">Uredi profil</string>
 
+    <!-- Edit Profile Activity strings-->
+    <string name="EditProfileSaveButtonLabel">Spremi</string>
+    <string name="EditProfileEditViewHint">Unesi novi username</string>
+
+    <string name="EditProfileNoChanges">Nema promjene</string>
+    <string name="EditProfileImageChange">Nova slika spremljena</string>
+    <string name="EditProfileUsernameChange">Novi username spremljen</string>
+    <string name="EditProfileAllChange">Spremljena nova slika i username</string>
+
     <!-- Shared Prefs Keys -->
     <string name="userID">userID</string>
     <string name="username">uName</string>
@@ -39,6 +51,7 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- TONIJEVE -->
+
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">  AIzaSyB_U2fGTnYXmkdegx-pRCAIuKBLWcVSMr0  </string>
 
 
