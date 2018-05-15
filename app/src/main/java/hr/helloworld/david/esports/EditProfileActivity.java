@@ -134,9 +134,11 @@ public class EditProfileActivity extends AppCompatActivity {
             retVal = 1;
         } else if (selectedImage == null && !newUsername.equals(firebaseUser.getDisplayName())) {
             profileUpdates.setDisplayName(newUsername);
+            User.updateUserName(firebaseUser.getUid(), newUsername);
             retVal = 2;
         } else if (selectedImage != null && !newUsername.equals(firebaseUser.getDisplayName())) {
             profileUpdates.setDisplayName(newUsername);
+            User.updateUserName(firebaseUser.getUid(), newUsername);
             retVal = 3;
         }
 
@@ -181,9 +183,9 @@ public class EditProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
             profileUpdates.setPhotoUri(selectedImage);
             firebaseUser.updateProfile(profileUpdates.build());
+            User.updateUserImage(firebaseUser.getUid(), selectedImage);
         }
 
         @Override

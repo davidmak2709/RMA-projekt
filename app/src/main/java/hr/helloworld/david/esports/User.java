@@ -1,6 +1,9 @@
 package hr.helloworld.david.esports;
 
 import android.net.Uri;
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,6 +16,7 @@ public class User {
     private Uri photoUrl;
 
     public User() {
+
     }
 
     public User(String uuid, String username, String email, Uri photoUrl) {
@@ -23,9 +27,8 @@ public class User {
     }
 
     public void saveNewUser(){
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
-
         databaseReference.child(this.uuid).child("uuid").setValue(this.uuid);
         databaseReference.child(this.uuid).child("username").setValue(this.username);
         databaseReference.child(this.uuid).child("searchUsername").setValue(this.username.toLowerCase());
@@ -36,6 +39,21 @@ public class User {
         }
 
     }
+
+    public static void updateUserName(String uuid, String username) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+        databaseReference.child(uuid).child("username").setValue(username);
+        databaseReference.child(uuid).child("searchUsername").setValue(username.toLowerCase());
+    }
+
+    public static void updateUserImage(String uuid, Uri photoUrl) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        if (photoUrl != null) {
+            databaseReference.child(uuid).child("photoUrl").setValue(photoUrl.toString());
+        }
+    }
+
 
     public String getuuid() {
         return uuid;
