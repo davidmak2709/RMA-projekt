@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,6 +25,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText searchBar;
     private ListView usersList;
+    private String searchString;
 
 
     @Override
@@ -73,10 +75,13 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void searchForUser(String searchString) {
+    private void searchForUser(final String searchString) {
+        this.searchString = searchString;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference database = firebaseDatabase.getReference("users");
-        Query query = database.orderByChild("searchUsername").startAt(searchString).limitToFirst(10);
+        Query query = database.orderByChild("searchUsername")
+                .startAt(this.searchString)
+                .limitToFirst(10);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -86,11 +91,13 @@ public class SearchActivity extends AppCompatActivity {
 
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.child("username").exists())
-                        usernames.add(snapshot.child("username").getValue().toString());
+                    if (snapshot.child("searchUsername").exists() &&
+                            snapshot.child("searchUsername").getValue().toString().startsWith(searchString)) {
 
-                    if (snapshot.child("photoUrl").exists())
-                        urls.add(snapshot.child("photoUrl").getValue().toString());
+                        usernames.add(snapshot.child("username").getValue().toString());
+                        if (snapshot.child("photoUrl").exists())
+                            urls.add(snapshot.child("photoUrl").getValue().toString());
+                    }
                 }
 
                 CustomListView customListView = new CustomListView(SearchActivity.this, urls, usernames);
