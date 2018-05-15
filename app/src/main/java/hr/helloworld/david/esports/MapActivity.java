@@ -210,20 +210,6 @@ public class MapActivity extends AppCompatActivity implements
                     //novi db - dodavanje u bazu
                     myRef.push().setValue(new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, "TONI", time));
 
-                    //TODO zamijeniti timer boljim rijesenjem, ako ne dodati brisanje  u NOVU BAZU
-                    //mTimer.schedule(new UpdateTimer(){
-                    //  public void run(){
-                    //     Log.d("******", "kraj eventa");
-
-                    // Event newevent = db.eventDao().findByName(id);
-                    //Log.d("******",newevent.getSport());
-                    // db.eventDao().delete(newevent);
-                    // Log.d("******", "event izbrisan");
-
-
-                    //   }
-
-                    //}, 30000);
 
                     startGeofence();
                     reDrawEvents();
