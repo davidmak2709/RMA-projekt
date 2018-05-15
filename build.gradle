@@ -16,10 +16,17 @@ buildscript {
     }
 }
 
+ext {
+    buildToolsVersion = "26.0.2"
+    supportLibVersion = "26.3.1"
+    archRoomVersion = "1.0.0"
+}
+
 allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://maven.google.com'}
     }
 }
 

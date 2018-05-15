@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="lat" type="id" />
+    <item name="lon" type="id" />
+    <item name="geofence" type="id">1</item>
+</resources>
