@@ -76,6 +76,7 @@ public class SearchActivity extends AppCompatActivity {
     private void searchForUser(String searchString) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference database = firebaseDatabase.getReference("users");
+        //TODO uzima sve
         Query query = database.orderByChild("searchUsername").startAt(searchString).limitToFirst(10);
 
         query.addValueEventListener(new ValueEventListener() {
