@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,12 +28,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView imageSelector;
     private FirebaseUser firebaseUser;
     private Uri selectedImage;
+    private Uri retUri;
     private UserProfileChangeRequest.Builder profileUpdates;
 
 
     private static int RESULT_LOAD_IMAGE = 1;
 
-    //TODO Update database
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,18 +53,24 @@ public class EditProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         usernameET = findViewById(R.id.EditProfileActivityUsernameEditView);
-        usernameET.setText(firebaseUser.getDisplayName());
-
 
         imageSelector = findViewById(R.id.EditProfileActivityImageSelector);
-        Picasso.with(EditProfileActivity.this)
-                .load(firebaseUser.getPhotoUrl())
-                .centerCrop()
-                .resize(250, 250)
-                .into(imageSelector);
+
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            usernameET.setText(firebaseUser.getDisplayName());
+
+
+            Picasso.with(EditProfileActivity.this)
+                    .load(firebaseUser.getPhotoUrl())
+                    .centerCrop()
+                    .resize(250, 250)
+                    .into(imageSelector);
+        }
 
         imageSelector.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +90,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String result;
                 switch (updateUserProfile()) {
-                    case -1:
+                    case 0:
                         result = getResources().getString(R.string.EditProfileNoChanges);
                         break;
                     case 1:
@@ -125,7 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private int updateUserProfile() {
         String newUsername = usernameET.getText().toString();
         profileUpdates = new UserProfileChangeRequest.Builder();
-        int retVal = -1;
+        int retVal = 0;
 
 
         if (selectedImage == null && newUsername.equals(firebaseUser.getDisplayName())) {
@@ -166,14 +173,16 @@ public class EditProfileActivity extends AppCompatActivity {
                     + firebaseUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    selectedImage = uri;
+                    retUri = uri;
                 }
             });
 
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                Thread.interrupted();
+            while (retUri == null) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    Thread.interrupted();
+                }
             }
 
 
@@ -183,9 +192,9 @@ public class EditProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            profileUpdates.setPhotoUri(selectedImage);
+            profileUpdates.setPhotoUri(retUri);
             firebaseUser.updateProfile(profileUpdates.build());
-            User.updateUserImage(firebaseUser.getUid(), selectedImage);
+            User.updateUserImage(firebaseUser.getUid(), retUri);
         }
 
         @Override
@@ -193,5 +202,6 @@ public class EditProfileActivity extends AppCompatActivity {
             super.onProgressUpdate(values);
         }
     }
+
 
 }
