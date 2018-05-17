@@ -1,6 +1,7 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
                     firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
             user.getUserFriendsUUID();
         }
+
 
         Toolbar toolbar = findViewById(R.id.toolbarSearchActivity);
         toolbar.setTitle(" ");

@@ -6,14 +6,19 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_public_black_24dp"
             android:title="KARTA GOOGLE" />
 
     </group>
 
-    <item android:title="Korisnik">
+    <item android:title="@string/navMenuUserString">
         <menu>
+
+            <item
+                android:id="@+id/nav_friends_list"
+                android:icon="@drawable/ic_group_black"
+                android:title="Moj Drugovi" />
             <item
                 android:id="@+id/nav_edit_profile"
                 android:icon="@drawable/ic_menu_manage"

@@ -2,6 +2,7 @@ package hr.helloworld.david.esports;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +15,12 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.appevents.AppEventsConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +51,16 @@ public class MainActivity extends AppCompatActivity
         ImageView profilePictureHeader = headerView.findViewById(R.id.userImageMainActivity);
         TextView usernameHeader = headerView.findViewById(R.id.usernameMainActivity);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Picasso.with(MainActivity.this)
-                .load(firebaseUser.getPhotoUrl())
-                .resize(150, 150)
-                .centerCrop()
-                .into(profilePictureHeader);
-
-        usernameHeader.setText(firebaseUser.getDisplayName());
-
+        if (firebaseUser != null) {
+            Picasso.with(MainActivity.this)
+                    .load(firebaseUser.getPhotoUrl())
+                    .resize(150, 150)
+                    .centerCrop()
+                    .into(profilePictureHeader);
+            usernameHeader.setText(firebaseUser.getDisplayName());
+        }
     }
 
     @Override
@@ -92,11 +90,10 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_map) {
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_edit_profile) {
@@ -108,6 +105,9 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, StartActivity.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_friends_list) {
+            Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

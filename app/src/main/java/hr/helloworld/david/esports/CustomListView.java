@@ -14,14 +14,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CustomListView extends ArrayAdapter<String> {
 
     private ArrayList<String> urls;
-    private ArrayList<String> usernames;
+    private ArrayList<String> userNames;
     private ArrayList<String> uuid;
     private User user;
     private Activity context;
@@ -29,12 +31,12 @@ public class CustomListView extends ArrayAdapter<String> {
     private View.OnClickListener addListener;
     private View.OnClickListener removeListener;
 
-    CustomListView(Activity context, ArrayList<String> urls, ArrayList<String> usernames,
+    CustomListView(Activity context, ArrayList<String> urls, ArrayList<String> userNames,
                    ArrayList<String> uuid, User user) {
-        super(context, R.layout.listview, usernames);
+        super(context, R.layout.listview, userNames);
 
         this.urls = urls;
-        this.usernames = usernames;
+        this.userNames = userNames;
         this.uuid = uuid;
         this.user = user;
         this.context = context;
@@ -61,8 +63,6 @@ public class CustomListView extends ArrayAdapter<String> {
         addListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Dodaj", "add friend");
-
                 user.friendsUUID.add(uuid.get(position));
 
                 v.setBackground(ContextCompat.getDrawable(context,
@@ -75,10 +75,8 @@ public class CustomListView extends ArrayAdapter<String> {
         removeListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Dodaj", "remove friend");
-
                 v.setBackground(ContextCompat.getDrawable(context,
-                        android.R.drawable.ic_input_add));
+                        R.drawable.ic_person_add));
 
                 user.friendsUUID.remove(uuid.get(position));
 
@@ -94,16 +92,26 @@ public class CustomListView extends ArrayAdapter<String> {
                 .centerCrop()
                 .into(viewHolder.profilePictureView);
 
-        viewHolder.textView.setText(usernames.get(position));
+        viewHolder.textView.setText(userNames.get(position));
 
-        if (user.friendsUUID.contains(uuid.get(position))) {
-            viewHolder.addFriendButton.setBackground(ContextCompat.getDrawable(context,
-                    android.R.drawable.ic_delete));
+        if (!Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser())
+                .getUid().equals(uuid.get(position))) {
 
-            viewHolder.addFriendButton.setOnClickListener(removeListener);
+            if (user.friendsUUID.contains(uuid.get(position))) {
+                viewHolder.addFriendButton.setBackground(ContextCompat.getDrawable(context,
+                        android.R.drawable.ic_delete));
 
+                viewHolder.addFriendButton.setOnClickListener(removeListener);
+
+            } else {
+                viewHolder.addFriendButton.setBackground(ContextCompat.getDrawable(context,
+                        R.drawable.ic_person_add));
+
+                viewHolder.addFriendButton.setOnClickListener(addListener);
+            }
         } else {
-            viewHolder.addFriendButton.setOnClickListener(addListener);
+            viewHolder.addFriendButton.setOnClickListener(null);
+            viewHolder.addFriendButton.setVisibility(View.GONE);
         }
 
         return r;

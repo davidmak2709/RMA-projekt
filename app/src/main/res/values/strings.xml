@@ -26,6 +26,7 @@
     <!-- Main Activity Drawer strings -->
     <string name="navMenuLogOutString">Odjavi se</string>
     <string name="navMenuEditProfileString">Uredi profil</string>
+    <string name="navMenuUserString">Korisnik</string>
 
     <!-- Edit Profile Activity strings-->
     <string name="EditProfileSaveButtonLabel">Spremi</string>
