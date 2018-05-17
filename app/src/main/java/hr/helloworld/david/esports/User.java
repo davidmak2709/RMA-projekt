@@ -1,11 +1,15 @@
 package hr.helloworld.david.esports;
 
 import android.net.Uri;
-import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class User {
 
@@ -13,6 +17,7 @@ public class User {
     private String username;
     private String searchUsername;
     private String email;
+    public ArrayList<String> friendsUUID = new ArrayList<>();
     private Uri photoUrl;
 
     public User() {
@@ -54,44 +59,35 @@ public class User {
         }
     }
 
+    public void getUserFriendsUUID() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        Query query = databaseReference.child(this.uuid).child("friends");
 
-    public String getuuid() {
-        return uuid;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    friendsUUID.add(snapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
-    public void setuuid(String uuid) {
-        this.uuid = uuid;
+    public void updateFriendsStatus() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.child(this.uuid).child("friends").removeValue();
+        for (String friend : this.friendsUUID) {
+            databaseReference.child(this.uuid).child("friends").child(friend).setValue(true);
+        }
     }
+
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSearchUsername() {
-        return searchUsername;
-    }
-
-    public void setSearchUsername(String searchUsername) {
-        this.searchUsername = searchUsername;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Uri getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(Uri photoUrl) {
-        this.photoUrl = photoUrl;
-    }
 }

@@ -7,10 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +29,22 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText searchBar;
     private ListView usersList;
+    private FirebaseUser firebaseUser;
+    private User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
+                    firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
+            user.getUserFriendsUUID();
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbarSearchActivity);
         toolbar.setTitle(" ");
@@ -45,9 +58,11 @@ public class SearchActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user.updateFriendsStatus();
                 finish();
             }
         });
+
 
         searchBar = findViewById(R.id.searchEditText);
         usersList = findViewById(R.id.userList);
@@ -71,7 +86,6 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -90,11 +104,12 @@ public class SearchActivity extends AppCompatActivity {
                     .startAt(strings[0])
                     .limitToFirst(10);
 
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     ArrayList<String> urls = new ArrayList<>();
                     ArrayList<String> userNames = new ArrayList<>();
+                    ArrayList<String> uuid = new ArrayList<>();
 
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -103,13 +118,15 @@ public class SearchActivity extends AppCompatActivity {
                                         .getValue(String.class)).startsWith(strings[0])) {
 
                             userNames.add(snapshot.child("username").getValue(String.class));
+                            uuid.add(snapshot.child("uuid").getValue(String.class));
 
                             if (snapshot.child("photoUrl").exists())
                                 urls.add(snapshot.child("photoUrl").getValue(String.class));
                         }
                     }
 
-                    CustomListView customListView = new CustomListView(SearchActivity.this, urls, userNames);
+                    CustomListView customListView = new CustomListView(SearchActivity.this,
+                            urls, userNames, uuid, user);
                     usersList.setAdapter(customListView);
 
                 }
