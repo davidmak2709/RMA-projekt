@@ -1,19 +1,24 @@
 package hr.helloworld.david.esports;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseListAdapter;
+
+import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +30,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
 
 public class DetailsActivity extends AppCompatActivity {
     ArrayList<Event> events = new ArrayList<Event>();
+
+    private String idevent;
+    private TextView inputTextView;
+    private FirebaseListAdapter<ChatMessage> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         //dohvacanje intenta
         final Intent detailsIntent = getIntent();
-        final String idevent = String.valueOf(detailsIntent.getStringExtra("id"));
+        idevent = "-LCh_Z3VmqS_An3TGnte";
 
         //spajanje na bazu TESTNO
         // Write a message to the database
@@ -146,6 +155,68 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
 
+        inputTextView = findViewById(R.id.input_message);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.send_message_button);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (firebaseUser != null)
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("events")
+                            .child(idevent)
+                            .child("messages")
+                            .push()
+                            .setValue(new ChatMessage(inputTextView.getText().toString(),
+                                    firebaseUser.getDisplayName()));
+
+                inputTextView.setText("");
+            }
+        });
+
+        displayMessages();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        adapter.startListening();
+    }
+
+    private void displayMessages() {
+        ListView listOfMessages = findViewById(R.id.list_of_messages);
+
+
+        Query reference = FirebaseDatabase.getInstance().getReference()
+                .child("events").child(idevent).child("messages");
+
+        FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
+                .setQuery(reference, ChatMessage.class)
+                .setLayout(R.layout.message)
+                .build();
+
+        adapter = new FirebaseListAdapter<ChatMessage>(options) {
+            @Override
+            protected void populateView(View v, ChatMessage model, int position) {
+                TextView messageText = v.findViewById(R.id.message_text);
+                TextView messageUser = v.findViewById(R.id.message_user);
+                TextView messageTime = v.findViewById(R.id.message_time);
+
+                messageText.setText(model.getMessageText());
+                messageUser.setText(model.getMessageUser());
+
+                @SuppressLint("SimpleDateFormat")
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+
+                messageTime.setText(dateFormat.format(model.getMessageTime()));
+            }
+        };
+
+        listOfMessages.setAdapter(adapter);
     }
 
 }
