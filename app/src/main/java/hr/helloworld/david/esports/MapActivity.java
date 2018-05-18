@@ -208,9 +208,10 @@ public class MapActivity extends AppCompatActivity implements
                     //TODO iz sesije izvuci mOwner i dodati u event
 
                     //novi db - dodavanje u bazu
-                    myRef.push().setValue(new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, "TONI", time));
+                    Event newEvent = new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, "TONI", time);
+                    myRef.push().setValue(newEvent);
 
-
+                    EVENTS.add(newEvent);
                     startGeofence();
                     reDrawEvents();
 
@@ -363,8 +364,9 @@ public class MapActivity extends AppCompatActivity implements
     private LocationRequest locationRequest;
     // Defined in mili seconds.
     // This number in extremely low, and should be used only for debug
-    private final int UPDATE_INTERVAL = 1000 * 60 * 3;
-    private final int FASTEST_INTERVAL = 1000 * 30;
+    // todo smanji ili povecaj ocisno o potrebi
+    private final int UPDATE_INTERVAL = 1000; // * 60 * 3;
+    private final int FASTEST_INTERVAL = 1000; //* 30;
 
     // Start location Updates
     private void startLocationUpdates() {
@@ -613,6 +615,7 @@ public class MapActivity extends AppCompatActivity implements
     private void startGeofence() {
         Log.i(TAG, "startGeofence()");
         if (geoFenceMarker != null) {
+            //todo rijesit ovaj problem EVENTS-1
             Geofence geofence = createGeofence(geoFenceMarker.getPosition(), EVENTS.get(EVENTS.size() - 1).getRadius());
             GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
             addGeofence(geofenceRequest);

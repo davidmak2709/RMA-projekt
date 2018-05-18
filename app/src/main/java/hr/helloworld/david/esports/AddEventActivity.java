@@ -1,15 +1,24 @@
 package hr.helloworld.david.esports;
 
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -19,6 +28,13 @@ public class AddEventActivity extends AppCompatActivity {
     private TextView editSize;
     private TextView editTime;
     private TextView editSport;
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    int mHour;
+    int mMinute;
+
+    String date_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +53,36 @@ public class AddEventActivity extends AppCompatActivity {
         editSize = findViewById(R.id.editSize);
         editTime = findViewById(R.id.editTime);
         editSport = findViewById(R.id.editSport);
+
+        //DATE and TIME pickers
+        editTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        AddEventActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                Log.d("****", "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
+
+                date_time = year + "-" + month + "-" + day;
+                timePicker();
+            }
+        };
 
         editLong.setText("Long: " + String.valueOf(addIntent.getDoubleExtra("Long", 0)));
         editLat.setText("Lat: " + String.valueOf(addIntent.getDoubleExtra("Lat", 0)));
@@ -93,6 +139,28 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void timePicker(){
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                        mHour = hourOfDay;
+                        mMinute = minute;
+
+                        editTime.setText(date_time+" "+hourOfDay + ":" + minute);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
     }
 
 }
