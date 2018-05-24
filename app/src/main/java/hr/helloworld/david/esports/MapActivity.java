@@ -83,6 +83,8 @@ public class MapActivity extends AppCompatActivity implements
     private Location lastLocation;
     public List<Event> EVENTS = new ArrayList<Event>();
 
+    private Timer mTimer;
+
     DatabaseReference myRef;
 
     private FirebaseAuth firebaseAuth;
@@ -165,6 +167,9 @@ public class MapActivity extends AppCompatActivity implements
         // create GoogleApiClient
         createGoogleApi();
 
+        //TODO ucitat sve elemente iz baze i pogenut geofence za svakog do njih, paziti na duplikate !!
+        //TODO za sad radi na principu kada se doda event zadnji event iz liste doda se u geofence (nevalja jer vrijedi samo lokalno)
+        //todo potencijalno rijesenje -> nakon dohvacanja novog bloka izbrisi sve geofence i onda ih opet pokreni za sve elemente
     }
 
     @Override
@@ -172,7 +177,9 @@ public class MapActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+
     //0. Activity communication
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -191,6 +198,7 @@ public class MapActivity extends AppCompatActivity implements
                         time = dt.parse(timeStr);
                     } catch (ParseException e) {
                         e.printStackTrace();
+                        //todo uzmi sadašnje vrijeme time = new Date().getTime();
                     }
                     Log.d("****", String.valueOf(time));
                     String sport = data.getStringExtra("sport");
@@ -203,6 +211,7 @@ public class MapActivity extends AppCompatActivity implements
                     String owner = firebaseUser.getDisplayName();
                     
                     //TODO iz sesije izvuci mOwner i dodati u event
+
                     //novi db - dodavanje u bazu
                     Event newEvent = new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, owner, time);
                     myRef.push().setValue(newEvent);
@@ -210,6 +219,7 @@ public class MapActivity extends AppCompatActivity implements
                     EVENTS.add(newEvent);
                     startGeofence();
                     reDrawEvents();
+
                 }
                 break;
             }
@@ -226,6 +236,7 @@ public class MapActivity extends AppCompatActivity implements
             writeLastLocation();
         }
         for (int ix = 0; ix < EVENTS.size(); ix++) {
+            Log.d("TESTING:", String.valueOf(ix));
             map.addMarker(new MarkerOptions()
                     .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
                     .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
@@ -256,6 +267,8 @@ public class MapActivity extends AppCompatActivity implements
     public void onMapClick(LatLng latLng) {
         Log.d(TAG, "onMapClick(" + latLng + ")");
         markerForGeofence(latLng);
+
+        // ~dohvat lokacije eventa lat long
 
     }
 
@@ -482,6 +495,8 @@ public class MapActivity extends AppCompatActivity implements
 
     //5. GEOFENCE
 
+    private static final long GEO_DURATION = 60 * 60 * 1000; // 1 h trajanje
+    private static final String GEOFENCE_REQ_ID = "My Geofence";
     private static final float GEOFENCE_RADIUS = 500.0f; // in meters
 
     // Create a Geofence
@@ -506,6 +521,7 @@ public class MapActivity extends AppCompatActivity implements
     }
 
     private PendingIntent geoFencePendingIntent;
+    private final int GEOFENCE_REQ_CODE = 0;
 
     private PendingIntent createGeofencePendingIntent() {
         Log.d(TAG, "createGeofencePendingIntent");
@@ -584,7 +600,9 @@ public class MapActivity extends AppCompatActivity implements
                 .radius(r);
         map.addCircle(circleOptions);
 
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

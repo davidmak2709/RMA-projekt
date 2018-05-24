@@ -3,4 +3,5 @@
     <item name="lat" type="id" />
     <item name="lon" type="id" />
     <item name="geofence" type="id">1</item>
+    <item name="DetailsActivityGoingButtonId" type="id">2</item>
 </resources>

@@ -26,6 +26,7 @@
     <!-- Main Activity Drawer strings -->
     <string name="navMenuLogOutString">Odjavi se</string>
     <string name="navMenuEditProfileString">Uredi profil</string>
+    <string name="navMenuUserString">Korisnik</string>
 
     <!-- Edit Profile Activity strings-->
     <string name="EditProfileSaveButtonLabel">Spremi</string>
@@ -35,6 +36,12 @@
     <string name="EditProfileImageChange">Nova slika spremljena</string>
     <string name="EditProfileUsernameChange">Novi username spremljen</string>
     <string name="EditProfileAllChange">Spremljena nova slika i username</string>
+
+    <!-- Details Activity strings-->
+    <string name="DetailsGoingLabel">Dolazim</string>
+    <string name="DetailsCantGoLabel">Ne dolazim</string>
+    <string name="DetailsGoingUserAlertDialogLabel">Dolaze: </string>
+    <string name="DetailsGoingInsertTextHit">Unesite vašu poruku</string>
 
     <!-- Shared Prefs Keys -->
     <string name="userID">userID</string>
