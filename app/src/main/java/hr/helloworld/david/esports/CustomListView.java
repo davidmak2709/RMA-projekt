@@ -102,7 +102,6 @@ public class CustomListView extends ArrayAdapter<String> {
                         android.R.drawable.ic_delete));
 
                 viewHolder.addFriendButton.setOnClickListener(removeListener);
-
             } else {
                 viewHolder.addFriendButton.setBackground(ContextCompat.getDrawable(context,
                         R.drawable.ic_person_add));

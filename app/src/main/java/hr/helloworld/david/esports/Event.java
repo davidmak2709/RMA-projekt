@@ -8,6 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 

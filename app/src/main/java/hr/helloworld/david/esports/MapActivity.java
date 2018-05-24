@@ -208,7 +208,13 @@ public class MapActivity extends AppCompatActivity implements
                     //TODO iz sesije izvuci mOwner i dodati u event
 
                     //novi db - dodavanje u bazu
-                    myRef.push().setValue(new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, "TONI", time));
+                    /**
+                     * Dodavanje u bazu i spremanje id-a ::: ovo je David napravio
+                     * tako da kod merga moramo dobro istestirati
+                     */
+                    String newEventId = myRef.push().getKey();
+                    myRef.child(newEventId).setValue(new Event(newEventId, geoFenceMarker.getPosition(), radius,
+                            duration, size, 0, sport, "TONI", time));
 
                     //TODO zamijeniti timer boljim rijesenjem, ako ne dodati brisanje  u NOVU BAZU
                     //mTimer.schedule(new UpdateTimer(){

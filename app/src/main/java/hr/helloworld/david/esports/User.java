@@ -1,6 +1,7 @@
 package hr.helloworld.david.esports;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
