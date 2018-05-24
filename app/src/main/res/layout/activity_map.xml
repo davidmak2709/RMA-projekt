@@ -39,7 +39,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Add" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:drawableStart="@android:drawable/ic_input_add"
+            android:text="Add"/>
     </LinearLayout>
 
     <!--GoogleMap fragment-->

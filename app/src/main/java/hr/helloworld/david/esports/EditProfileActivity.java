@@ -1,10 +1,13 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +36,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     private static int RESULT_LOAD_IMAGE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +79,29 @@ public class EditProfileActivity extends AppCompatActivity {
         imageSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                String[] options = {"Galerija","Slikaj se"};
 
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+                builder.setTitle("Pick a color");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                Intent i = new Intent(Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                                break;
+                            case 1:
+                                Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -124,6 +147,9 @@ public class EditProfileActivity extends AppCompatActivity {
             selectedImage = data.getData();
             imageSelector.setImageURI(selectedImage);
 
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            selectedImage = data.getData();
+            imageSelector.setImageURI(selectedImage);
         }
 
 

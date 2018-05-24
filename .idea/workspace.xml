@@ -2,8 +2,17 @@
 <project version="4">
   <component name="AndroidLayouts">
     <shared>
-      <config />
+      <config>
+        <target>compat-android-21</target>
+      </config>
     </shared>
+    <layouts>
+      <layout url="file://$PROJECT_DIR$/.idea/misc.xml">
+        <config>
+          <theme>@style/AppTheme</theme>
+        </config>
+      </layout>
+    </layouts>
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
@@ -12,93 +21,21 @@
     <list default="true" id="02dda0ac-43cc-4ec4-90e7-3cdc0d9cb3d1" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_core_common_1_1_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_core_runtime_1_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_lifecycle_common_1_1_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_lifecycle_livedata_core_1_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_lifecycle_runtime_1_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_lifecycle_viewmodel_1_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_persistence_db_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_persistence_db_framework_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_persistence_room_common_1_0_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_arch_persistence_room_runtime_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_animated_vector_drawable_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_appcompat_v7_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_1_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_solver_1_1_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_design_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_recyclerview_v7_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_annotations_27_1_1_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_compat_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_ui_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_utils_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_fragment_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_media_compat_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_v4_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_vector_drawable_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_core_3_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_idling_resource_3_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_monitor_1_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_runner_1_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_transition_27_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_facebook_android_facebook_android_sdk_4_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_ads_identifier_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_auth_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_auth_api_phone_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_auth_base_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_base_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_basement_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_flags_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_location_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_maps_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_measurement_base_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_places_placereport_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_stats_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_android_gms_play_services_tasks_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_code_findbugs_jsr305_2_0_1_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_analytics_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_analytics_impl_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_auth_15_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_auth_interop_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_common_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_core_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_database_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_database_collection_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_database_connection_15_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_iid_15_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_iid_interop_15_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_measurement_connector_15_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_measurement_connector_impl_15_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_messaging_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_storage_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_storage_common_15_0_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_parse_bolts_bolts_android_1_2_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_squareup_javawriter_2_1_1_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_squareup_picasso_picasso_2_5_2_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/javax_inject_javax_inject_1_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/junit_junit_4_12_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/net_sf_kxml_kxml2_2_3_0_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_hamcrest_hamcrest_core_1_3_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_hamcrest_hamcrest_integration_1_3_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_hamcrest_hamcrest_library_1_3_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/RMA-projekt.iml" afterPath="$PROJECT_DIR$/RMA-projekt.iml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/DetailsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/DetailsActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/FriendListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/FriendListActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/SearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/SearchActivity.java" />
-      <change beforePath="$PROJECT_DIR$/local.properties" afterPath="$PROJECT_DIR$/local.properties" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/EditProfileActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/EditProfileActivity.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-v21/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-v21/styles.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -113,7 +50,48 @@
     </projectState>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="EditProfileActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/EditProfileActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="99">
+              <caret line="94" column="35" lean-forward="false" selection-start-line="94" selection-start-column="35" selection-end-line="94" selection-end-column="35" />
+              <folding>
+                <element signature="e#2627#3984#0" expanded="true" />
+                <element signature="e#2974#3926#0" expanded="true" />
+                <element signature="e#3925#3926#0" expanded="true" />
+                <element signature="e#3983#3984#0" expanded="true" />
+                <element signature="e#4102#5181#0" expanded="true" />
+                <element signature="e#5180#5181#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-manifest">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SignupActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/SignupActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="68" column="61" lean-forward="false" selection-start-line="65" selection-start-column="15" selection-end-line="68" selection-end-column="61" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -2162,6 +2140,15 @@
         <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/DetailsActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/SearchActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/FriendListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values-v21/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_add_event.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/AddEventActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/EditProfileActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -2199,6 +2186,11 @@
             <path>
               <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="manifests" type="f94875db:AndroidManifestsGroupNode" />
+            </path>
+            <path>
+              <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
             </path>
             <path>
@@ -2206,6 +2198,13 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
               <item name="esports" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="esports" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="GeofenceErrorMessage.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
           </expand>
           <select />
@@ -2396,10 +2395,19 @@
       <option name="presentableId" value="Default" />
       <updated>1527194895706</updated>
     </task>
+    <task id="LOCAL-00001" summary="First commit in new branch">
+      <created>1527197975870</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1527197975870</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1024" height="772" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -2407,11 +2415,12 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973805" sideWeight="0.5040733" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973805" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973805" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32973805" sideWeight="0.49592668" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -2420,7 +2429,7 @@
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973805" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299389" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990755" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
@@ -2436,6 +2445,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First commit in new branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="First commit in new branch" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="12" />
@@ -2443,22 +2456,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/AddEventActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/DetailsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="91" column="38" lean-forward="true" selection-start-line="88" selection-start-column="11" selection-end-line="91" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/User.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-165">
@@ -2480,10 +2477,149 @@
         <state relative-caret-position="735">
           <caret line="64" column="8" lean-forward="false" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
           <folding>
-            <element signature="e#1681#1823#0" expanded="true" />
-            <element signature="e#1822#1823#0" expanded="true" />
+            <element signature="e#1681#1823#0" expanded="false" />
+            <element signature="e#1822#1823#0" expanded="false" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/DetailsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3195">
+          <caret line="99" column="77" lean-forward="true" selection-start-line="99" selection-start-column="77" selection-end-line="99" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-v21/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="android-dummy:///home/david/AndroidStudioProjects/RMA-projekt//Theme Editor">
+      <provider selected="true" editor-type-id="themeEditor">
+        <state theme-name="AppTheme" module-name="app" proportion="0.5861601" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="35" lean-forward="false" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="51" lean-forward="false" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-337">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="707">
+          <caret line="161" column="72" lean-forward="false" selection-start-line="161" selection-start-column="72" selection-end-line="161" selection-end-column="72" />
+          <folding>
+            <element signature="e#6051#6868#0" expanded="false" />
+            <element signature="e#6867#6868#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_event.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_add_event.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/AddEventActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="47" column="8" lean-forward="false" selection-start-line="47" selection-start-column="8" selection-end-line="47" selection-end-column="8" />
+          <folding>
+            <element signature="e#1811#2543#0" expanded="false" />
+            <element signature="e#2542#2543#0" expanded="false" />
+            <element signature="e#2574#2967#0" expanded="false" />
+            <element signature="e#2966#2967#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/SignupActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="68" column="61" lean-forward="false" selection-start-line="65" selection-start-column="15" selection-end-line="68" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/EditProfileActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="94" column="35" lean-forward="false" selection-start-line="94" selection-start-column="35" selection-end-line="94" selection-end-column="35" />
+          <folding>
+            <element signature="e#2627#3984#0" expanded="true" />
+            <element signature="e#2974#3926#0" expanded="true" />
+            <element signature="e#3925#3926#0" expanded="true" />
+            <element signature="e#3983#3984#0" expanded="true" />
+            <element signature="e#4102#5181#0" expanded="true" />
+            <element signature="e#5180#5181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
       </provider>
     </entry>
   </component>

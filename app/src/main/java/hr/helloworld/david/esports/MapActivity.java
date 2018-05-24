@@ -158,6 +158,9 @@ public class MapActivity extends AppCompatActivity implements
                     addIntent.putExtra("Long", geoFenceMarker.getPosition().longitude);
                     startActivityForResult(addIntent, 222);
 
+                } else {
+                    Toast.makeText(MapActivity.this,"Odaberite lokaciju " +
+                            "clickom na karti.",Toast.LENGTH_LONG).show();
                 }
                 reDrawEvents();
             }

@@ -1,1 +1,11 @@
-<resources></resources>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">?attr/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
+        <item name="android:colorBackground">@color/background_material_light</item>
+
+    </style>
+</resources>
