@@ -358,6 +358,13 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        user.updateFriendsStatus();
+        finish();
+    }
+
     private void displayMessages() {
         ListView listOfMessages = findViewById(R.id.list_of_messages);
 
