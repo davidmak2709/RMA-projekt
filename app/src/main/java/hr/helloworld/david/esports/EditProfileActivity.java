@@ -1,12 +1,17 @@
 package hr.helloworld.david.esports;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -79,10 +84,12 @@ public class EditProfileActivity extends AppCompatActivity {
         imageSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] options = {"Galerija","Slikaj se"};
+                String[] options = {getResources().getString(R.string.PickerGalleryOption),
+                        getResources().getString(R.string.PickerCameraOption)};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
-                builder.setTitle("Pick a color");
+                builder.setTitle(getResources().getString(R.string.PickerTitle));
+
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -94,7 +101,13 @@ public class EditProfileActivity extends AppCompatActivity {
                                 break;
                             case 1:
                                 Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+                                if (ContextCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                        == PackageManager.PERMISSION_GRANTED &&
+                                        ContextCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.CAMERA)
+                                                == PackageManager.PERMISSION_GRANTED) {
+
+                                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                                }
                                 break;
                             default:
                                 break;
@@ -140,6 +153,21 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (ContextCompat.checkSelfPermission(EditProfileActivity.this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(EditProfileActivity.this,
+                    new String[]{android.Manifest.permission.CAMERA},
+                    1);
+        }
+
+
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -147,11 +175,24 @@ public class EditProfileActivity extends AppCompatActivity {
             selectedImage = data.getData();
             imageSelector.setImageURI(selectedImage);
 
-        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             selectedImage = data.getData();
             imageSelector.setImageURI(selectedImage);
         }
 
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(EditProfileActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    2);
+        }
 
     }
 

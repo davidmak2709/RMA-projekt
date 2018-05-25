@@ -3,6 +3,11 @@
 
     <string name="FirebaseStorageProfilePictureFolder">profile_picture/</string>
 
+    <!--Profile picture picker strings-->
+    <string name="PickerTitle">Odaberi:</string>
+    <string name="PickerGalleryOption">Galerija</string>
+    <string name="PickerCameraOption">Slikaj kamerom</string>
+
     <!-- Start Activity strings -->
     <string name="StartActivityEmailTextView">E-mail: </string>
     <string name="StartActivityPasswordTextView">Lozinka: </string>

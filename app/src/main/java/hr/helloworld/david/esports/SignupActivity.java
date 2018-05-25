@@ -1,10 +1,16 @@
 package hr.helloworld.david.esports;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -43,6 +49,8 @@ public class SignupActivity extends AppCompatActivity {
 
 
     private static int RESULT_LOAD_IMAGE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +71,37 @@ public class SignupActivity extends AppCompatActivity {
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                String[] options = {getResources().getString(R.string.PickerGalleryOption),
+                        getResources().getString(R.string.PickerCameraOption)};
 
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
+                builder.setTitle(getResources().getString(R.string.PickerTitle));
+
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent i = new Intent(Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                                break;
+                            case 1:
+                                Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (ContextCompat.checkSelfPermission(SignupActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                        == PackageManager.PERMISSION_GRANTED &&
+                                        ContextCompat.checkSelfPermission(SignupActivity.this, Manifest.permission.CAMERA)
+                                                == PackageManager.PERMISSION_GRANTED) {
+
+                                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -82,6 +117,19 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (ContextCompat.checkSelfPermission(SignupActivity.this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(SignupActivity.this,
+                    new String[]{android.Manifest.permission.CAMERA},
+                    1);
+        }
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -89,11 +137,25 @@ public class SignupActivity extends AppCompatActivity {
             selectedImage = data.getData();
             profileImageView.setImageURI(selectedImage);
 
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+            selectedImage = data.getData();
+            profileImageView.setImageURI(selectedImage);
         }
 
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(SignupActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    2);
+        }
+
+    }
 
     private void createNewUser() {
         if (!validateForm()) {

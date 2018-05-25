@@ -282,20 +282,21 @@ public class MapActivity extends AppCompatActivity implements
 
         //otvaranje nove aktivnosti preko snackbara,na klik markera
         final String[] parts = marker.getTitle().split(":");
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.LL), "Find more about event -->", Snackbar.LENGTH_LONG)
-                .setActionTextColor(getResources().getColor(R.color.colorPrimary))
-                .setAction("Details", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent detailsIntent = new Intent(getApplicationContext(), DetailsActivity.class);
-                        detailsIntent.putExtra("id", parts[0]);
-                        startActivity(detailsIntent);
-                    }
-                });
+        if (!parts[0].equals("tvoja pozicija") && !parts[0].equals("Novi event")) {
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.LL), "Find more about event -->", Snackbar.LENGTH_LONG)
+                    .setActionTextColor(getResources().getColor(R.color.colorPrimary))
+                    .setAction("Details", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent detailsIntent = new Intent(getApplicationContext(), DetailsActivity.class);
+                            detailsIntent.putExtra("id", parts[0]);
+                            startActivity(detailsIntent);
+                        }
+                    });
 
-        snackbar.show();
-
+            snackbar.show();
+        }
         return false;
     }
 
@@ -479,7 +480,7 @@ public class MapActivity extends AppCompatActivity implements
     // Create a marker for the geofence creation
     private void markerForGeofence(LatLng latLng) {
         Log.i(TAG, "markerForGeofence(" + latLng + ")");
-        String title = latLng.latitude + ", " + latLng.longitude;
+        String title = "Novi event";
         // Define marker options
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
