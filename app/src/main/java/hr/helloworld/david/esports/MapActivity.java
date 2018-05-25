@@ -132,11 +132,13 @@ public class MapActivity extends AppCompatActivity implements
                                 snapshot.getValue(Event.class).getOwner(),
                                 snapshot.getValue(Event.class).getmTime()));
                         Log.d("**** ", String.valueOf(snapshot.getValue(Event.class).getmTime()));
+                        startGeofence();
                     } catch (Exception e) {
                         Log.d("**** ", "Problem!");
                     }
                 }
                 Log.d("TESTING ", "novi blok");
+
                 reDrawEvents();
             }
 
@@ -198,7 +200,6 @@ public class MapActivity extends AppCompatActivity implements
                         time = dt.parse(timeStr);
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        //todo uzmi sadašnje vrijeme time = new Date().getTime();
                     }
                     Log.d("****", String.valueOf(time));
                     String sport = data.getStringExtra("sport");
@@ -210,14 +211,14 @@ public class MapActivity extends AppCompatActivity implements
                     firebaseUser = firebaseAuth.getCurrentUser();
                     String owner = firebaseUser.getDisplayName();
                     
-                    //TODO iz sesije izvuci mOwner i dodati u event
-
                     //novi db - dodavanje u bazu
                     Event newEvent = new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, owner, time);
                     myRef.push().setValue(newEvent);
 
                     EVENTS.add(newEvent);
-                    startGeofence();
+                    msgToast = Toast.makeText(getApplicationContext(), "Event added", Toast.LENGTH_SHORT);
+                    msgToast.show();
+                    //startGeofence();
                     reDrawEvents();
 
                 }
@@ -546,8 +547,7 @@ public class MapActivity extends AppCompatActivity implements
                 public void onSuccess(Void aVoid) {
                     // Geofences added
                     // ...
-                    msgToast = Toast.makeText(getApplicationContext(), "Event added", Toast.LENGTH_SHORT);
-                    msgToast.show();
+
                     Log.d(TAG, "Geofence added");
                 }
             })
@@ -618,10 +618,12 @@ public class MapActivity extends AppCompatActivity implements
 
     // Start Geofence creation process
     private void startGeofence() {
-        Log.i(TAG, "startGeofence()");
+        Log.e(TAG, "startGeofence()"+ EVENTS.get(EVENTS.size()-1).getId());
         if (geoFenceMarker != null) {
             //todo rijesit ovaj problem EVENTS-1
-            Geofence geofence = createGeofence(geoFenceMarker.getPosition(), EVENTS.get(EVENTS.size() - 1).getRadius());
+
+            LatLng loc = new LatLng(EVENTS.get(EVENTS.size()-1).getLat(),EVENTS.get(EVENTS.size()-1).getLng());
+            Geofence geofence = createGeofence(loc, EVENTS.get(EVENTS.size() - 1).getRadius());
             GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
             addGeofence(geofenceRequest);
             Log.e("TESTING:geofenceID", geofence.getRequestId());
