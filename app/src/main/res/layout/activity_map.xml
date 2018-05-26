@@ -18,28 +18,55 @@
         android:paddingRight="15dp"
         android:paddingBottom="5dp">
 
-        <!--Latitude-->
-        <TextView
-            android:id="@+id/lat"
+        <LinearLayout
+            android:id="@+id/LL2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Lat: " />
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="2dp">
+            <!--Latitude-->
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/radio_Group"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <!--Longitude-->
-        <TextView
-            android:id="@+id/lon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Long: " />
 
+                <RadioButton
+                    android:id="@+id/radio_nogomet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nogomet" />
+
+                <RadioButton
+                    android:id="@+id/radio_rukomet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rukomet" />
+
+                <RadioButton
+                    android:id="@+id/radio_košarka"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/košarka" />
+
+                <RadioButton
+                    android:id="@+id/radio_ostalo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ostalo" />
+            </RadioGroup>
+        </LinearLayout>
         <Button
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="Add" />
+
     </LinearLayout>
 
     <!--GoogleMap fragment-->

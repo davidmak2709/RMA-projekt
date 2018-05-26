@@ -18,8 +18,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -57,7 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
+
 
 
 public class MapActivity extends AppCompatActivity implements
@@ -66,10 +69,10 @@ public class MapActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
-        LocationListener {
+        LocationListener,
+        OnCheckedChangeListener{
     private static final String TAG = MapActivity.class.getSimpleName();
 
-    private TextView textLat, textLong;
     private Button add_button;
     private MapFragment mapFragment;
     private GoogleMap map;
@@ -83,12 +86,15 @@ public class MapActivity extends AppCompatActivity implements
     private Location lastLocation;
     public List<Event> EVENTS = new ArrayList<Event>();
 
-    private Timer mTimer;
 
     DatabaseReference myRef;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+
+    private String sportPick;
+    private Boolean filterOff = Boolean.TRUE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +103,6 @@ public class MapActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_map);
 
         geofencingClient = LocationServices.getGeofencingClient(this);
-
-        textLat = findViewById(R.id.lat);
-        textLong = findViewById(R.id.lon);
 
         // TIMESTAMP
         long ts = new Date().getTime();
@@ -121,18 +124,20 @@ public class MapActivity extends AppCompatActivity implements
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     try {
                         //Ako stavimo da je obavezno polje nece imati mogućnost generiranja NULL
-                        EVENTS.add(new Event(snapshot.getValue(Event.class).getId(),
-                                new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
-                                snapshot.getValue(Event.class).getRadius(),
-                                snapshot.getValue(Event.class).getDuration(),
-                                snapshot.getValue(Event.class).getNumId(),
-                                snapshot.getValue(Event.class).getSize(),
-                                snapshot.getValue(Event.class).getGooing(),
-                                snapshot.getValue(Event.class).getSport(),
-                                snapshot.getValue(Event.class).getOwner(),
-                                snapshot.getValue(Event.class).getmTime()));
-                        Log.d("**** ", String.valueOf(snapshot.getValue(Event.class).getmTime()));
-                        startGeofence();
+                            EVENTS.add(new Event(snapshot.getValue(Event.class).getId(),
+                                    new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
+                                    snapshot.getValue(Event.class).getRadius(),
+                                    snapshot.getValue(Event.class).getDuration(),
+                                    snapshot.getValue(Event.class).getNumId(),
+                                    snapshot.getValue(Event.class).getSize(),
+                                    snapshot.getValue(Event.class).getGooing(),
+                                    snapshot.getValue(Event.class).getSport(),
+                                    snapshot.getValue(Event.class).getOwner(),
+                                    snapshot.getValue(Event.class).getmTime()));
+                            Log.d("**** ", String.valueOf(snapshot.getValue(Event.class).getmTime()));
+                            // todo  odkomentirati, work in progress
+                            // startGeofence();
+
                     } catch (Exception e) {
                         Log.d("**** ", "Problem!");
                     }
@@ -161,9 +166,11 @@ public class MapActivity extends AppCompatActivity implements
                     startActivityForResult(addIntent, 222);
 
                 }
-                reDrawEvents();
             }
         });
+
+        //traži
+        ((RadioGroup)findViewById(R.id.radio_Group)).setOnCheckedChangeListener(this);
         // initialize GoogleMaps
         initGMaps();
         // create GoogleApiClient
@@ -237,12 +244,35 @@ public class MapActivity extends AppCompatActivity implements
             writeLastLocation();
         }
         for (int ix = 0; ix < EVENTS.size(); ix++) {
-            Log.d("TESTING:", String.valueOf(ix));
-            map.addMarker(new MarkerOptions()
-                    .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
-                    .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+            Log.d("TESTING:", EVENTS.get(ix).getSport()+sportPick+filterOff);
 
-            drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+            if (filterOff) {
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                        .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+            }
+            else{
+                if(sportPick.equals("ostalo")){
+                    if(!EVENTS.get(ix).getSport().equals("nogomet")  && !EVENTS.get(ix).getSport().equals("rukomet") && !EVENTS.get(ix).getSport().equals("košarka")){
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                                .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                        drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+                    }
+                }else{
+                    if(sportPick.equals(EVENTS.get(ix).getSport())) {
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                                .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                        drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+                    }
+                }
+
+            }
         }
     }
 
@@ -395,8 +425,7 @@ public class MapActivity extends AppCompatActivity implements
 
     // Write location coordinates on UI
     private void writeActualLocation(Location location) {
-        textLat.setText("Lat: " + location.getLatitude());
-        textLong.setText("Long: " + location.getLongitude());
+
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
@@ -620,7 +649,7 @@ public class MapActivity extends AppCompatActivity implements
     private void startGeofence() {
         Log.e(TAG, "startGeofence()"+ EVENTS.get(EVENTS.size()-1).getId());
         if (geoFenceMarker != null) {
-            //todo rijesit ovaj problem EVENTS-1
+
 
             LatLng loc = new LatLng(EVENTS.get(EVENTS.size()-1).getLat(),EVENTS.get(EVENTS.size()-1).getLng());
             Geofence geofence = createGeofence(loc, EVENTS.get(EVENTS.size() - 1).getRadius());
@@ -633,6 +662,46 @@ public class MapActivity extends AppCompatActivity implements
         }
 
     }
+
+    //FILTER
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+        String numeral = null;
+        filterOff = Boolean.FALSE;
+
+        switch (checkedId) {
+
+            case R.id.radio_nogomet:
+
+                sportPick = "nogomet";
+
+                break;
+
+            case R.id.radio_košarka:
+
+                sportPick = "košarka";
+
+                break;
+
+            case R.id.radio_rukomet:
+
+                sportPick = "rukomet";
+
+                break;
+
+            case R.id.radio_ostalo:
+
+                sportPick = "ostalo";
+
+                break;
+
+
+        }
+        reDrawEvents();
+    }
+
 }
 
 
