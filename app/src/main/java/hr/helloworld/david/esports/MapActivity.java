@@ -666,19 +666,13 @@ public class MapActivity extends AppCompatActivity implements
 
     // Start Geofence creation process
     private void startGeofence() {
-        Log.e(TAG, "startGeofence()"+ EVENTS.get(EVENTS.size()-1).getId());
-        if (geoFenceMarker != null) {
+        Log.d(TAG, "startGeofence()"+ EVENTS.get(EVENTS.size()-1).getId());
 
-
-            LatLng loc = new LatLng(EVENTS.get(EVENTS.size()-1).getLat(),EVENTS.get(EVENTS.size()-1).getLng());
-            Geofence geofence = createGeofence(loc, EVENTS.get(EVENTS.size() - 1).getRadius());
-            GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
-            addGeofence(geofenceRequest);
-            Log.e("TESTING:geofenceID", geofence.getRequestId());
-
-        } else {
-            Log.e(TAG, "Geofence marker is null");
-        }
+        LatLng loc = new LatLng(EVENTS.get(EVENTS.size()-1).getLat(),EVENTS.get(EVENTS.size()-1).getLng());
+        Geofence geofence = createGeofence(loc, EVENTS.get(EVENTS.size() - 1).getRadius());
+        GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
+        addGeofence(geofenceRequest);
+        Log.d("TESTING:geofenceID", geofence.getRequestId());
 
     }
 

@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
@@ -20,9 +20,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -45,11 +43,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MapActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MapActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1063">
-              <caret line="77" column="25" lean-forward="false" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+            <state relative-caret-position="265">
+              <caret line="674" column="61" lean-forward="true" selection-start-line="674" selection-start-column="61" selection-end-line="674" selection-end-column="61" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3520#3527#0" expanded="true" />
@@ -69,18 +67,18 @@
                 <element signature="e#23623#23624#0" expanded="true" />
                 <element signature="e#23674#24051#0" expanded="true" />
                 <element signature="e#24050#24051#0" expanded="true" />
-                <element signature="e#26385#26621#0" expanded="true" />
-                <element signature="e#26620#26621#0" expanded="true" />
-                <element signature="e#26667#27023#0" expanded="true" />
-                <element signature="e#27022#27023#0" expanded="true" />
-                <element signature="e#27904#27905#0" expanded="true" />
-                <element signature="e#27937#27938#0" expanded="true" />
+                <element signature="e#26247#26483#0" expanded="true" />
+                <element signature="e#26482#26483#0" expanded="true" />
+                <element signature="e#26529#26885#0" expanded="true" />
+                <element signature="e#26884#26885#0" expanded="true" />
+                <element signature="e#27766#27767#0" expanded="true" />
+                <element signature="e#27799#27800#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_map.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="activity_map.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml">
           <provider editor-type-id="text-editor">
             <state relative-caret-position="323">
@@ -2144,8 +2142,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java" />
       </list>
     </option>
   </component>
@@ -2179,6 +2177,17 @@
             <path>
               <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="esports" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RMA-projekt" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
             </path>
             <path>
@@ -2201,7 +2210,7 @@
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="device.picker.selection" value="PMF4C17923004089" />
+    <property name="device.picker.selection" value="e000f283" />
     <property name="android.profiler.active" value="true" />
   </component>
   <component name="RunDashboard">
@@ -2394,7 +2403,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.4978678" order="6" side_tool="false" content_ui="tabs" />
@@ -2407,7 +2415,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.4946695" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934782" sideWeight="0.8432836" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934782" sideWeight="0.8432836" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2459,12 +2467,12 @@
             <element signature="e#23623#23624#0" expanded="true" />
             <element signature="e#23674#24051#0" expanded="true" />
             <element signature="e#24050#24051#0" expanded="true" />
-            <element signature="e#26385#26621#0" expanded="true" />
-            <element signature="e#26620#26621#0" expanded="true" />
-            <element signature="e#26667#27023#0" expanded="true" />
-            <element signature="e#27022#27023#0" expanded="true" />
-            <element signature="e#27904#27905#0" expanded="true" />
-            <element signature="e#27937#27938#0" expanded="true" />
+            <element signature="e#26247#26483#0" expanded="true" />
+            <element signature="e#26482#26483#0" expanded="true" />
+            <element signature="e#26529#26885#0" expanded="true" />
+            <element signature="e#26884#26885#0" expanded="true" />
+            <element signature="e#27766#27767#0" expanded="true" />
+            <element signature="e#27799#27800#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2480,10 +2488,21 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="34" column="67" lean-forward="false" selection-start-line="34" selection-start-column="67" selection-end-line="34" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/hr/helloworld/david/esports/MapActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1063">
-          <caret line="77" column="25" lean-forward="false" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+        <state relative-caret-position="265">
+          <caret line="674" column="61" lean-forward="true" selection-start-line="674" selection-start-column="61" selection-end-line="674" selection-end-column="61" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3520#3527#0" expanded="true" />
@@ -2503,25 +2522,14 @@
             <element signature="e#23623#23624#0" expanded="true" />
             <element signature="e#23674#24051#0" expanded="true" />
             <element signature="e#24050#24051#0" expanded="true" />
-            <element signature="e#26385#26621#0" expanded="true" />
-            <element signature="e#26620#26621#0" expanded="true" />
-            <element signature="e#26667#27023#0" expanded="true" />
-            <element signature="e#27022#27023#0" expanded="true" />
-            <element signature="e#27904#27905#0" expanded="true" />
-            <element signature="e#27937#27938#0" expanded="true" />
+            <element signature="e#26247#26483#0" expanded="true" />
+            <element signature="e#26482#26483#0" expanded="true" />
+            <element signature="e#26529#26885#0" expanded="true" />
+            <element signature="e#26884#26885#0" expanded="true" />
+            <element signature="e#27766#27767#0" expanded="true" />
+            <element signature="e#27799#27800#0" expanded="true" />
           </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_map.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="34" column="67" lean-forward="false" selection-start-line="34" selection-start-column="67" selection-end-line="34" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
   </component>
