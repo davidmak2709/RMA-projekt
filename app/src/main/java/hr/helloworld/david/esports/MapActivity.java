@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,6 +121,9 @@ public class MapActivity extends AppCompatActivity implements
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                //čišćenje evenata i geofenceva
+                //todo makovac : problemi s porukama untar events-a
+                removeGeofences();
                 EVENTS.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     try {
@@ -135,8 +139,9 @@ public class MapActivity extends AppCompatActivity implements
                                     snapshot.getValue(Event.class).getOwner(),
                                     snapshot.getValue(Event.class).getmTime()));
                             Log.d("**** ", String.valueOf(snapshot.getValue(Event.class).getmTime()));
-                            // todo  odkomentirati, work in progress
-                            // startGeofence();
+                            // todo  odkomentirati, work in progress - Rijeseno
+                            // dodavanje geofenca jedan po jedan nakon ucitavanja svakog elementa u listu EVENTS
+                             startGeofence();
 
                     } catch (Exception e) {
                         Log.d("**** ", "Problem!");
@@ -563,11 +568,12 @@ public class MapActivity extends AppCompatActivity implements
         geoFencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return geoFencePendingIntent;
 
+
     }
 
     // Add the created GeofenceRequest to the device's monitoring list
     private void addGeofence(GeofencingRequest request) {
-        Log.d(TAG, "addGeofence");
+        Log.d("****", "addGeofence"+ request.toString());
         Log.d(TAG, Boolean.toString(checkPermission()));
         if (checkPermission())
 
@@ -576,8 +582,7 @@ public class MapActivity extends AppCompatActivity implements
                 public void onSuccess(Void aVoid) {
                     // Geofences added
                     // ...
-
-                    Log.d(TAG, "Geofence added");
+                    Log.d("****", "Geofence added");
                 }
             })
                     .addOnFailureListener(this, new OnFailureListener() {
@@ -663,6 +668,29 @@ public class MapActivity extends AppCompatActivity implements
 
     }
 
+    //remove all geofences
+    private void removeGeofences() {
+
+        geofencingClient.removeGeofences(createGeofencePendingIntent()).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Geofence removed
+                // ...
+
+                Log.d("****", "Geofence removed");
+            }
+        })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to add geofences
+                        // ...
+                        msgToast.setText("Test: " + "failed removing");
+                        msgToast.show();
+                    }
+                });
+    }
+
     //FILTER
 
     @Override
@@ -670,7 +698,8 @@ public class MapActivity extends AppCompatActivity implements
 
         String numeral = null;
         filterOff = Boolean.FALSE;
-
+        //TODO problem identičnog stringa Košarka != košarka :(
+        //todo doadti opcij SVE
         switch (checkedId) {
 
             case R.id.radio_nogomet:
