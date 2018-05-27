@@ -17,12 +17,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,6 +60,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,7 +76,7 @@ public class MapActivity extends AppCompatActivity implements
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
         LocationListener,
-        OnCheckedChangeListener{
+        OnItemSelectedListener{
     private static final String TAG = MapActivity.class.getSimpleName();
 
     private Button add_button;
@@ -95,6 +100,7 @@ public class MapActivity extends AppCompatActivity implements
 
     private String sportPick;
     private Boolean filterOff = Boolean.TRUE;
+
 
 
     @Override
@@ -174,8 +180,16 @@ public class MapActivity extends AppCompatActivity implements
             }
         });
 
-        //traži
-        ((RadioGroup)findViewById(R.id.radio_Group)).setOnCheckedChangeListener(this);
+        //filter pomocu dropdown-a
+        Spinner dropdown = findViewById(R.id.spinner1);
+        dropdown.setOnItemSelectedListener(this);
+        String[] items = new String[]{"sve", "nogomet", "košarka", "rukomet", "ostalo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
+
+
         // initialize GoogleMaps
         initGMaps();
         // create GoogleApiClient
@@ -251,7 +265,7 @@ public class MapActivity extends AppCompatActivity implements
         for (int ix = 0; ix < EVENTS.size(); ix++) {
             Log.d("TESTING:", EVENTS.get(ix).getSport()+sportPick+filterOff);
 
-            if (filterOff) {
+            if (filterOff || sportPick.equals("all")) {
                 map.addMarker(new MarkerOptions()
                         .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
                         .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
@@ -692,45 +706,38 @@ public class MapActivity extends AppCompatActivity implements
     }
 
     //FILTER
-
     @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-        String numeral = null;
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         filterOff = Boolean.FALSE;
+        Log.d("**** ", "filter ON");
         //TODO problem identičnog stringa Košarka != košarka :(
         //todo doadti opcij SVE
-        switch (checkedId) {
-
-            case R.id.radio_nogomet:
-
+        switch (position) {
+            case 0:
+                sportPick = "all";
+                break;
+            case 1:
+                Log.d("**** ", "case 1");
                 sportPick = "nogomet";
-
                 break;
-
-            case R.id.radio_košarka:
-
+            case 2:
                 sportPick = "košarka";
-
                 break;
-
-            case R.id.radio_rukomet:
-
+            case 3:
                 sportPick = "rukomet";
-
                 break;
-
-            case R.id.radio_ostalo:
-
+            case 4:
                 sportPick = "ostalo";
-
                 break;
-
 
         }
         reDrawEvents();
     }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        sportPick = "all";
+    }
 }
 
 

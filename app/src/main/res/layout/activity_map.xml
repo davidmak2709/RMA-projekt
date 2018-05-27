@@ -28,37 +28,13 @@
             android:paddingRight="2dp"
             android:paddingTop="2dp">
             <!--Latitude-->
-            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/radio_Group"
-                android:layout_width="fill_parent"
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@android:drawable/btn_dropdown"
+                />
 
-
-                <RadioButton
-                    android:id="@+id/radio_nogomet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/nogomet" />
-
-                <RadioButton
-                    android:id="@+id/radio_rukomet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rukomet" />
-
-                <RadioButton
-                    android:id="@+id/radio_košarka"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/košarka" />
-
-                <RadioButton
-                    android:id="@+id/radio_ostalo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ostalo" />
-            </RadioGroup>
         </LinearLayout>
         <Button
             android:id="@+id/add_button"
