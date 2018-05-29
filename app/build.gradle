@@ -45,7 +45,14 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compile 'com.facebook.android:facebook-android-sdk:4.31.0'
+
+
+    implementation('com.facebook.android:facebook-android-sdk:4.23.0') {
+        exclude group: 'com.android.support', module: 'animated-vector-drawable'
+        exclude group: 'com.android.support', module: 'cardview-v7'
+        exclude group: 'com.android.support', module: 'customtabs'
+    }
+
     compile 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
