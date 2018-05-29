@@ -123,7 +123,7 @@ public class SearchActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         if (snapshot.child("searchUsername").exists() &&
                                 Objects.requireNonNull(snapshot.child("searchUsername")
-                                        .getValue(String.class)).startsWith(strings[0])) {
+                                        .getValue(String.class)).startsWith(strings[0].toLowerCase())) {
 
                             userNames.add(snapshot.child("username").getValue(String.class));
                             uuid.add(snapshot.child("uuid").getValue(String.class));

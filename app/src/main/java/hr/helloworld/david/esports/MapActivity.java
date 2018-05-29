@@ -132,7 +132,6 @@ public class MapActivity extends AppCompatActivity implements
                 EVENTS.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     try {
-                        //Ako stavimo da je obavezno polje nece imati mogućnost generiranja NULL
                         EVENTS.add(new Event(snapshot.getValue(Event.class).naslov, snapshot.getValue(Event.class).getId(),
                                 new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
                                 snapshot.getValue(Event.class).getRadius(),
@@ -143,7 +142,8 @@ public class MapActivity extends AppCompatActivity implements
                                 snapshot.getValue(Event.class).getSport(),
                                 snapshot.getValue(Event.class).getOwner(),
                                 snapshot.getValue(Event.class).getmTime()));
-                        Log.d("**** ", String.valueOf(snapshot.getValue(Event.class).getmTime()));
+
+                        startGeofence();
                     } catch (Exception e) {
                         Log.d("**** ", "Problem!");
                     }
