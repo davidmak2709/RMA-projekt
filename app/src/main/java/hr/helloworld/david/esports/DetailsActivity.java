@@ -87,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         if(firebaseUser != null){
             user = new User(firebaseUser.getUid(),firebaseUser.getDisplayName(),firebaseUser.getEmail(),
-                                firebaseUser.getPhotoUrl());
+                    firebaseUser.getPhotoUrl());
 
             user.getUserFriendsUUID();
         }
@@ -102,17 +102,17 @@ public class DetailsActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                String key = snapshot.getKey();
-                                int gooing = snapshot.getValue(Event.class).getGooing();
-                                HashMap<String, Object> result = new HashMap<>();
-                                result.put("gooing", gooing + 1);
-                                myRef.child(key).updateChildren(result);
+                            String key = snapshot.getKey();
+                            int gooing = snapshot.getValue(Event.class).getGooing();
+                            HashMap<String, Object> result = new HashMap<>();
+                            result.put("gooing", gooing + 1);
+                            myRef.child(key).updateChildren(result);
 
-                                myRef.child(key).child("goingUsers").child(firebaseUser.getUid())
-                                        .child("username").setValue(firebaseUser.getDisplayName());
+                            myRef.child(key).child("goingUsers").child(firebaseUser.getUid())
+                                    .child("username").setValue(firebaseUser.getDisplayName());
 
-                                myRef.child(key).child("goingUsers").child(firebaseUser.getUid())
-                                        .child("photoUrl").setValue(firebaseUser.getPhotoUrl().toString());
+                            myRef.child(key).child("goingUsers").child(firebaseUser.getUid())
+                                    .child("photoUrl").setValue(firebaseUser.getPhotoUrl().toString());
                         }
                     }
 
@@ -162,19 +162,20 @@ public class DetailsActivity extends AppCompatActivity {
                 myRef.child(idevent).child("goingUsers").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d("TAG: ",user.friendsUUID.toString());
                         ArrayList<String> urls = new ArrayList<>();
                         ArrayList<String> userNames = new ArrayList<>();
                         ArrayList<String> uuid = new ArrayList<>();
 
-
+                        Log.d("***TAGG: ", idevent);
                         for (DataSnapshot snapshot:dataSnapshot.getChildren()){
                             if(firebaseUser.getUid().equals(snapshot.getKey())) {
+                                Log.d("***TAGG: ", snapshot.getKey());
                                 uuid.add(0,snapshot.getKey());
                                 userNames.add(0,snapshot.child("username").getValue(String.class));
                                 urls.add(0,snapshot.child("photoUrl").getValue(String.class));
                             }
                             else{
+                                Log.d("***TAGG: ", snapshot.getKey());
                                 uuid.add(snapshot.getKey());
                                 userNames.add(snapshot.child("username").getValue(String.class));
                                 urls.add(snapshot.child("photoUrl").getValue(String.class));
@@ -187,7 +188,7 @@ public class DetailsActivity extends AppCompatActivity {
                         builder.setTitle(getResources().getString(R.string.DetailsGoingUserAlertDialogLabel));
                         builder.setAdapter(customListView,null);
                         if (isClicked)
-                         builder.show();
+                            builder.show();
                     }
 
                     @Override
@@ -219,18 +220,19 @@ public class DetailsActivity extends AppCompatActivity {
 
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        event = new Event(snapshot.getValue(Event.class).getId(),
-                                new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
-                                snapshot.getValue(Event.class).getRadius(),
-                                snapshot.getValue(Event.class).getDuration(),
-                                snapshot.getValue(Event.class).getNumId(),
-                                snapshot.getValue(Event.class).getSize(),
-                                snapshot.getValue(Event.class).getGooing(),
-                                snapshot.getValue(Event.class).getSport(),
-                                snapshot.getValue(Event.class).getOwner(),
-                                snapshot.getValue(Event.class).getmTime());
+                    event = new Event(snapshot.getValue(Event.class).naslov
+                            , snapshot.getValue(Event.class).getId(),
+                            new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
+                            snapshot.getValue(Event.class).getRadius(),
+                            snapshot.getValue(Event.class).getDuration(),
+                            snapshot.getValue(Event.class).getNumId(),
+                            snapshot.getValue(Event.class).getSize(),
+                            snapshot.getValue(Event.class).getGooing(),
+                            snapshot.getValue(Event.class).getSport(),
+                            snapshot.getValue(Event.class).getOwner(),
+                            snapshot.getValue(Event.class).getmTime());
 
-                        userGoes = snapshot.child("goingUsers").child(firebaseUser.getUid()).exists();
+                    userGoes = snapshot.child("goingUsers").child(firebaseUser.getUid()).exists();
                 }
 
                 @SuppressWarnings("SimpleDateFormat")
@@ -285,7 +287,7 @@ public class DetailsActivity extends AppCompatActivity {
                     textViewGoingUsers.setText(String.valueOf(event.getGooing()));
                     textViewGoingUsers.setTextColor(getResources().getColor(R.color.colorTextLabel));
                     textViewGoingUsers.setTextSize(72);
-                    textViewGoingUsers.setOnClickListener(showGoingUsersList);
+//                    textViewGoingUsers.setOnClickListener(showGoingUsersList);
 
                     textViewSpace = new TextView(getApplicationContext());
                     textViewSpace.setText("/");
@@ -303,6 +305,7 @@ public class DetailsActivity extends AppCompatActivity {
                     textViewSize.setTextSize(32);
 
 
+                    goingLinearLayout.setOnClickListener(showGoingUsersList);
                     goingLinearLayout.addView(textViewGoingUsers);
                     goingLinearLayout.addView(textViewSpace);
                     goingLinearLayout.addView(textViewSize);

@@ -17,9 +17,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,6 +48,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,12 +60,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
+
 
 
 public class MapActivity extends AppCompatActivity implements
@@ -66,10 +75,10 @@ public class MapActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
-        LocationListener {
+        LocationListener,
+        OnItemSelectedListener {
     private static final String TAG = MapActivity.class.getSimpleName();
 
-    private TextView textLat, textLong;
     private Button add_button;
     private MapFragment mapFragment;
     private GoogleMap map;
@@ -83,12 +92,15 @@ public class MapActivity extends AppCompatActivity implements
     private Location lastLocation;
     public List<Event> EVENTS = new ArrayList<Event>();
 
-    private Timer mTimer;
 
     DatabaseReference myRef;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+
+    private String sportPick;
+    private Boolean filterOff = Boolean.TRUE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +109,6 @@ public class MapActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_map);
 
         geofencingClient = LocationServices.getGeofencingClient(this);
-
-        textLat = findViewById(R.id.lat);
-        textLong = findViewById(R.id.lon);
 
         // TIMESTAMP
         long ts = new Date().getTime();
@@ -117,11 +126,14 @@ public class MapActivity extends AppCompatActivity implements
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                //čišćenje evenata i geofenceva
+                //todo makovac : problemi s porukama untar events-a
+                removeGeofences();
                 EVENTS.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     try {
                         //Ako stavimo da je obavezno polje nece imati mogućnost generiranja NULL
-                        EVENTS.add(new Event(snapshot.getValue(Event.class).getId(),
+                        EVENTS.add(new Event(snapshot.getValue(Event.class).naslov, snapshot.getValue(Event.class).getId(),
                                 new LatLng(snapshot.getValue(Event.class).getLat(), snapshot.getValue(Event.class).getLng()),
                                 snapshot.getValue(Event.class).getRadius(),
                                 snapshot.getValue(Event.class).getDuration(),
@@ -137,6 +149,7 @@ public class MapActivity extends AppCompatActivity implements
                     }
                 }
                 Log.d("TESTING ", "novi blok");
+
                 reDrawEvents();
             }
 
@@ -162,9 +175,19 @@ public class MapActivity extends AppCompatActivity implements
                     Toast.makeText(MapActivity.this,"Odaberite lokaciju " +
                             "clickom na karti.",Toast.LENGTH_LONG).show();
                 }
-                reDrawEvents();
             }
         });
+
+        //filter pomocu dropdown-a
+        Spinner dropdown = findViewById(R.id.spinner1);
+        dropdown.setOnItemSelectedListener(this);
+        String[] items = new String[]{"sve", "nogomet", "košarka", "rukomet", "ostalo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
+
+
         // initialize GoogleMaps
         initGMaps();
         // create GoogleApiClient
@@ -201,7 +224,6 @@ public class MapActivity extends AppCompatActivity implements
                         time = dt.parse(timeStr);
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        //todo uzmi sadašnje vrijeme time = new Date().getTime();
                     }
                     Log.d("****", String.valueOf(time));
                     String sport = data.getStringExtra("sport");
@@ -212,15 +234,18 @@ public class MapActivity extends AppCompatActivity implements
                     firebaseAuth = FirebaseAuth.getInstance();
                     firebaseUser = firebaseAuth.getCurrentUser();
                     String owner = firebaseUser.getDisplayName();
-                    
-                    //TODO iz sesije izvuci mOwner i dodati u event
 
-                    //novi db - dodavanje u bazu
-                    Event newEvent = new Event(id, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, owner, time);
-                    myRef.push().setValue(newEvent);
+                    String newEventId = myRef.push().getKey();
+                    Event newEvent = new Event(id, newEventId, geoFenceMarker.getPosition(), radius, duration, size, 0, sport, owner, time);
+                    if (newEventId != null)
+                        myRef.child(newEventId).setValue(newEvent);
+
+                    Log.d("****/TAGA:", newEvent.toString());
 
                     EVENTS.add(newEvent);
-                    startGeofence();
+                    msgToast = Toast.makeText(getApplicationContext(), "Event added", Toast.LENGTH_SHORT);
+                    msgToast.show();
+                    //startGeofence();
                     reDrawEvents();
 
                 }
@@ -239,12 +264,34 @@ public class MapActivity extends AppCompatActivity implements
             writeLastLocation();
         }
         for (int ix = 0; ix < EVENTS.size(); ix++) {
-            Log.d("TESTING:", String.valueOf(ix));
-            map.addMarker(new MarkerOptions()
-                    .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
-                    .title(EVENTS.get(ix).getId() + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+            Log.d("TESTING:", EVENTS.get(ix).getSport() + sportPick + filterOff);
 
-            drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+            if (filterOff || sportPick.equals("all")) {
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                        .title(EVENTS.get(ix).naslov + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+            } else {
+                if (sportPick.equals("ostalo")) {
+                    if (!EVENTS.get(ix).getSport().equals("nogomet") && !EVENTS.get(ix).getSport().equals("rukomet") && !EVENTS.get(ix).getSport().equals("košarka")) {
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                                .title(EVENTS.get(ix).naslov + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                        drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+                    }
+                } else {
+                    if (sportPick.equals(EVENTS.get(ix).getSport())) {
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()))
+                                .title(EVENTS.get(ix).naslov + ": " + EVENTS.get(ix).getSport() + ", " + EVENTS.get(ix).getmTime() + ", " + EVENTS.get(ix).getGooing() + "/" + EVENTS.get(ix).getSize()));
+
+                        drawCircle(new LatLng(EVENTS.get(ix).getLat(), EVENTS.get(ix).getLng()), EVENTS.get(ix).getRadius(), ix);
+                    }
+                }
+
+            }
         }
     }
 
@@ -289,9 +336,13 @@ public class MapActivity extends AppCompatActivity implements
                     .setAction("Details", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent detailsIntent = new Intent(getApplicationContext(), DetailsActivity.class);
-                            detailsIntent.putExtra("id", parts[0]);
-                            startActivity(detailsIntent);
+                            for (Event event : EVENTS) {
+                                if (event.naslov.equals(parts[0])) {
+                                    Intent detailsIntent = new Intent(getApplicationContext(), DetailsActivity.class);
+                                    detailsIntent.putExtra("id", event.getId());
+                                    startActivity(detailsIntent);
+                                }
+                            }
                         }
                     });
 
@@ -398,8 +449,7 @@ public class MapActivity extends AppCompatActivity implements
 
     // Write location coordinates on UI
     private void writeActualLocation(Location location) {
-        textLat.setText("Lat: " + location.getLatitude());
-        textLong.setText("Long: " + location.getLongitude());
+
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
@@ -537,11 +587,12 @@ public class MapActivity extends AppCompatActivity implements
         geoFencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return geoFencePendingIntent;
 
+
     }
 
     // Add the created GeofenceRequest to the device's monitoring list
     private void addGeofence(GeofencingRequest request) {
-        Log.d(TAG, "addGeofence");
+        Log.d("****", "addGeofence" + request.toString());
         Log.d(TAG, Boolean.toString(checkPermission()));
         if (checkPermission())
 
@@ -550,9 +601,7 @@ public class MapActivity extends AppCompatActivity implements
                 public void onSuccess(Void aVoid) {
                     // Geofences added
                     // ...
-                    msgToast = Toast.makeText(getApplicationContext(), "Event added", Toast.LENGTH_SHORT);
-                    msgToast.show();
-                    Log.d(TAG, "Geofence added");
+                    Log.d("****", "Geofence added");
                 }
             })
                     .addOnFailureListener(this, new OnFailureListener() {
@@ -622,18 +671,71 @@ public class MapActivity extends AppCompatActivity implements
 
     // Start Geofence creation process
     private void startGeofence() {
-        Log.i(TAG, "startGeofence()");
-        if (geoFenceMarker != null) {
-            //todo rijesit ovaj problem EVENTS-1
-            Geofence geofence = createGeofence(geoFenceMarker.getPosition(), EVENTS.get(EVENTS.size() - 1).getRadius());
-            GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
-            addGeofence(geofenceRequest);
-            Log.e("TESTING:geofenceID", geofence.getRequestId());
+        Log.d(TAG, "startGeofence()" + EVENTS.get(EVENTS.size() - 1).getId());
 
-        } else {
-            Log.e(TAG, "Geofence marker is null");
+        LatLng loc = new LatLng(EVENTS.get(EVENTS.size() - 1).getLat(), EVENTS.get(EVENTS.size() - 1).getLng());
+        Geofence geofence = createGeofence(loc, EVENTS.get(EVENTS.size() - 1).getRadius());
+        GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
+        addGeofence(geofenceRequest);
+        Log.d("TESTING:geofenceID", geofence.getRequestId());
+
+    }
+
+    //remove all geofences
+    private void removeGeofences() {
+
+        geofencingClient.removeGeofences(createGeofencePendingIntent()).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Geofence removed
+                // ...
+
+                Log.d("****", "Geofence removed");
+            }
+        })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to add geofences
+                        // ...
+                        msgToast.setText("Test: " + "failed removing");
+                        msgToast.show();
+                    }
+                });
+    }
+
+    //FILTER
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        filterOff = Boolean.FALSE;
+        Log.d("**** ", "filter ON");
+        //TODO problem identičnog stringa Košarka != košarka :(
+        //todo doadti opcij SVE
+        switch (position) {
+            case 0:
+                sportPick = "all";
+                break;
+            case 1:
+                Log.d("**** ", "case 1");
+                sportPick = "nogomet";
+                break;
+            case 2:
+                sportPick = "košarka";
+                break;
+            case 3:
+                sportPick = "rukomet";
+                break;
+            case 4:
+                sportPick = "ostalo";
+                break;
+
         }
+        reDrawEvents();
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        sportPick = "all";
     }
 }
 

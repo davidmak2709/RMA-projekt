@@ -1,14 +1,7 @@
 package hr.helloworld.david.esports;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -16,6 +9,9 @@ public class Event {
 
     private String mId;       //Naslov
 
+
+
+    public String naslov;
     private double mLat;
     private double mLng;
     private float mRadius;
@@ -32,6 +28,13 @@ public class Event {
 
     }
 
+    public String getNaslov() {
+        return naslov;
+    }
+
+    public void setNaslov(String naslov) {
+        this.naslov = naslov;
+    }
     public void setId(String mId) {
         this.mId = mId;
     }
@@ -121,8 +124,7 @@ public class Event {
         return mTime;
     }
 
-    @Ignore
-    public Event(String mId, LatLng mLatLng, float mRadius, long mDuration, int mNumId, int mSize, int mGooing, String mSport, String mOwner, Date mTime) {
+    public Event(String naslov,String mId, LatLng mLatLng, float mRadius, long mDuration, int mNumId, int mSize, int mGooing, String mSport, String mOwner, Date mTime) {
         this.mId = mId;
         this.mLat = mLatLng.latitude;
         this.mLng = mLatLng.longitude;
@@ -134,10 +136,10 @@ public class Event {
         this.mSport = mSport;
         this.mOwner = mOwner;
         this.mTime = mTime;
+        this.naslov = naslov;
     }
 
-    @Ignore
-    public Event(String mId, LatLng mLatLng, float mRadius, long mDuration, int mSize, int mGooing, String mSport, String mOwner, Date mTime) {
+    public Event(String naslov,String mId, LatLng mLatLng, float mRadius, long mDuration, int mSize, int mGooing, String mSport, String mOwner, Date mTime) {
         this.mId = mId;
         this.mLat = mLatLng.latitude;
         this.mLng = mLatLng.longitude;
@@ -148,12 +150,14 @@ public class Event {
         this.mSport = mSport;
         this.mOwner = mOwner;
         this.mTime = mTime;
+        this.naslov = naslov;
     }
 
     @Override
     public String toString() {
         return "Event{" +
                 "mId='" + mId + '\'' +
+                ", naslov='" + naslov + '\'' +
                 ", mLat=" + mLat +
                 ", mLng=" + mLng +
                 ", mRadius=" + mRadius +
@@ -163,7 +167,7 @@ public class Event {
                 ", mGooing=" + mGooing +
                 ", mSport='" + mSport + '\'' +
                 ", mOwner='" + mOwner + '\'' +
-                ", mTime='" + mTime + '\'' +
+                ", mTime=" + mTime +
                 '}';
     }
 }
