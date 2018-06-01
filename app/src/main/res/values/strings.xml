@@ -97,5 +97,7 @@
     <string name="title_activity_add_event">AddEventActivity</string>
     <string name="title_activity_details">DetailsActivity</string>
 
+    <string name="main_activity_title">News feed</string>
+
 
 </resources>
