@@ -13,14 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import java.util.Calendar;
 
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends AppCompatActivity implements OnItemSelectedListener{
 
     private TextView editId;
     private TextView editRadius;
@@ -45,14 +49,15 @@ public class AddEventActivity extends AppCompatActivity {
 
         Intent addIntent = getIntent();
 
-        TextView editLat = findViewById(R.id.edit_lat);
-        TextView editLong = findViewById(R.id.edit_long);
+//        TextView editLat = findViewById(R.id.edit_lat);
+//        TextView editLong = findViewById(R.id.edit_long);
         editId = findViewById(R.id.editId);
         editRadius = findViewById(R.id.editRadius);
         editDuration = findViewById(R.id.editDuration);
         editSize = findViewById(R.id.editSize);
         editTime = findViewById(R.id.editTime);
         editSport = findViewById(R.id.editSport);
+        editSport.setVisibility(View.INVISIBLE);
 
         //DATE and TIME pickers
         editTime.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +89,16 @@ public class AddEventActivity extends AppCompatActivity {
             }
         };
 
-        editLong.setText("Long: " + String.valueOf(addIntent.getDoubleExtra("Long", 0)));
-        editLat.setText("Lat: " + String.valueOf(addIntent.getDoubleExtra("Lat", 0)));
+//        editLong.setText("Long: " + String.valueOf(addIntent.getDoubleExtra("Long", 0)));
+//        editLat.setText("Lat: " + String.valueOf(addIntent.getDoubleExtra("Lat", 0)));
+
+//drop down
+        Spinner dropdown = findViewById(R.id.spinnerAdd);
+        dropdown.setOnItemSelectedListener(this);
+        String[] items = new String[]{"nogomet", "košarka", "rukomet", "ostalo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -163,4 +176,35 @@ public class AddEventActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    //dropdown
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("**** ", "filter ON");
+
+        switch (position) {
+            case 0:
+                editSport.setText("nogomet");
+                break;
+            case 1:
+                editSport.setText("košarka");
+                break;
+            case 2:
+                editSport.setText("rukomet");
+                break;
+            case 3:
+                editSport.setVisibility(View.VISIBLE);
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+
+    }
 }
+
+
+
