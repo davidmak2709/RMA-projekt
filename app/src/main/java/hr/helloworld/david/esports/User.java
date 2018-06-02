@@ -1,7 +1,7 @@
 package hr.helloworld.david.esports;
 
 import android.net.Uri;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,9 +20,10 @@ public class User {
     private String email;
     public ArrayList<String> friendsUUID = new ArrayList<>();
     private Uri photoUrl;
+    public int numFriends = -1;
+
 
     public User() {
-
     }
 
     public User(String uuid, String username, String email, Uri photoUrl) {
@@ -66,17 +67,22 @@ public class User {
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                numFriends = (int) dataSnapshot.getChildrenCount();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     friendsUUID.add(snapshot.getKey());
                 }
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
+
 
     public void updateFriendsStatus() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
@@ -91,4 +97,11 @@ public class User {
         return username;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public Uri getPhotoUrl() {
+        return photoUrl;
+    }
 }

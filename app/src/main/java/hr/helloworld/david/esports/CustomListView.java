@@ -22,6 +22,7 @@ import java.util.Objects;
 
 public class CustomListView extends ArrayAdapter<String> {
 
+
     private ArrayList<String> urls;
     private ArrayList<String> userNames;
     private ArrayList<String> uuid;
@@ -64,7 +65,7 @@ public class CustomListView extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 user.friendsUUID.add(uuid.get(position));
-
+                user.numFriends++;
                 v.setBackground(ContextCompat.getDrawable(context,
                         android.R.drawable.ic_delete));
 
@@ -79,7 +80,7 @@ public class CustomListView extends ArrayAdapter<String> {
                         R.drawable.ic_person_add));
 
                 user.friendsUUID.remove(uuid.get(position));
-
+                user.numFriends--;
                 v.setOnClickListener(addListener);
             }
         };
@@ -114,6 +115,18 @@ public class CustomListView extends ArrayAdapter<String> {
         }
 
         return r;
+    }
+
+    public ArrayList<String> getUrls() {
+        return urls;
+    }
+
+    public ArrayList<String> getUserNames() {
+        return userNames;
+    }
+
+    public ArrayList<String> getUuid() {
+        return uuid;
     }
 
     class ViewHolder {

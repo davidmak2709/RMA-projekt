@@ -1,8 +1,6 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.arch.persistence.room.Database;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,14 +21,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class FriendListActivity extends AppCompatActivity {
 
     private User user;
     private ListView friendsList;
-    private FirebaseUser firebaseUser;
     private ProgressBar dialog;
     private CustomListView customListView;
 
@@ -39,7 +34,7 @@ public class FriendListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser != null){
             user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(),
                     firebaseUser.getPhotoUrl());
@@ -63,6 +58,7 @@ public class FriendListActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user.updateFriendsStatus();
                 finish();
             }
         });
@@ -83,11 +79,20 @@ public class FriendListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        user.updateFriendsStatus();
+        finish();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @SuppressWarnings("ConstantConditions")
     private class GetData extends AsyncTask<Void, Void, Void> {
 
-        private ArrayList<String> uuids = new ArrayList<>();
+        private ArrayList<String> UUID = new ArrayList<>();
         private ArrayList<String> urls = new ArrayList<>();
-        private ArrayList<String> usernames = new ArrayList<>();
+        private ArrayList<String> userNames = new ArrayList<>();
 
         @Override
         protected Void doInBackground(Void... strings) {
@@ -109,9 +114,9 @@ public class FriendListActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            usernames.add(snapshot.child("username").getValue().toString());
+                            userNames.add(snapshot.child("username").getValue().toString());
                             urls.add(snapshot.child("photoUrl").getValue().toString());
-                            uuids.add(snapshot.child("uuid").getValue().toString());
+                            UUID.add(snapshot.child("uuid").getValue().toString());
                         }
                     }
 
@@ -122,7 +127,7 @@ public class FriendListActivity extends AppCompatActivity {
                 });
             }
 
-            while ((usernames.isEmpty() && urls.isEmpty() && uuids.isEmpty()) && user.numFriends != 0) {
+            while ((userNames.isEmpty() && urls.isEmpty() && UUID.isEmpty()) && user.numFriends != 0) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -131,9 +136,8 @@ public class FriendListActivity extends AppCompatActivity {
             }
 
             customListView = new CustomListView(FriendListActivity.this,
-                    urls, usernames, uuids, user);
+                    urls, userNames, UUID, user);
 
-            Log.d("tagg:", "lala");
             return null;
         }
 
@@ -141,15 +145,18 @@ public class FriendListActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            while (customListView.getUrls().isEmpty() && customListView.getUserNames().isEmpty() && customListView.getUuid().isEmpty()) {
+            while (customListView.getUrls().isEmpty() && customListView.getUserNames().isEmpty()
+                    && customListView.getUuid().isEmpty()) {
+
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     Log.d("TAG", e.getMessage());
                 }
+                
             }
 
-            dialog.setVisibility(View.INVISIBLE);
+            dialog.setVisibility(View.GONE);
             friendsList.setAdapter(customListView);
         }
     }

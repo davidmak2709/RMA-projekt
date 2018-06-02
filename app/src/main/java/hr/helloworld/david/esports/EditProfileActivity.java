@@ -25,12 +25,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -190,15 +194,6 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(),
-                inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -247,11 +242,23 @@ public class EditProfileActivity extends AppCompatActivity {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("isThumb", "false").build();
 
         @Override
         protected Void doInBackground(String... strings) {
             storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
-                    + firebaseUser.getUid()).putFile(selectedImage);
+                    + firebaseUser.getUid()).putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                    if (task.isSuccessful())
+                        storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
+                                + firebaseUser.getUid()).updateMetadata(metadata);
+
+                }
+            });
+
             storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
                     + firebaseUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
