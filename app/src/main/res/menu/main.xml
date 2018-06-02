@@ -9,11 +9,4 @@
         android:icon="@drawable/ic_public_black_24dp"
         app:showAsAction="always" />
 
-
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/SearchActivitySearchEditViewHint"
-        android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always" />
 </menu>

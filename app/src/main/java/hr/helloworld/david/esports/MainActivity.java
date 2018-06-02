@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         if (firebaseUser != null) {
             Picasso.with(MainActivity.this)
                     .load(firebaseUser.getPhotoUrl())
-                    .resize(150, 150)
+                    .resize(200, 250)
                     .centerCrop()
                     .into(profilePictureHeader);
             usernameHeader.setText(firebaseUser.getDisplayName());
@@ -90,11 +90,6 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
 
-        } else if (item.getItemId() == R.id.action_settings) {
-
-            intent = new Intent(MainActivity.this, SearchActivity.class);
-            startActivity(intent);
-
         }
 
 
@@ -118,6 +113,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_friends_list) {
             Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
             startActivity(intent);
+        } else if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

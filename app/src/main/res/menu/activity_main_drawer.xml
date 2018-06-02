@@ -3,15 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-
-        <!--<item-->
-        <!--&lt;!&ndash;android:id="@+id/nav_map"&ndash;&gt;-->
-        <!--android:icon="@drawable/ic_public_black_24dp"-->
-        <!--android:title="KARTA GOOGLE" />-->
-
-    </group>
-
     <item android:title="@string/navMenuUserString">
         <menu>
 
@@ -20,14 +11,22 @@
                 android:icon="@drawable/ic_group_black"
                 android:title="@string/navMenuFriendsString" />
             <item
+                android:id="@+id/action_settings"
+                android:icon="@drawable/ic_youtube_searched_for_black_24dp"
+                android:title="@string/SearchActivitySearchEditViewHint" />
+
+            <item
                 android:id="@+id/nav_edit_profile"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="@string/navMenuEditProfileString" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@android:drawable/ic_lock_power_off"
-                android:title="@string/navMenuLogOutString" />
+
         </menu>
     </item>
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_power_settings_new_black_30dp"
+            android:title="@string/navMenuLogOutString" />
+    </group>
 </menu>
