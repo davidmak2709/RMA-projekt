@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MapActivity">
 
-    <!-- Line with Latitude and Longitude -->
     <LinearLayout
         android:id="@+id/LL"
         android:layout_width="match_parent"
@@ -27,7 +25,6 @@
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
             android:paddingTop="2dp">
-            <!--Latitude-->
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="match_parent"
@@ -42,7 +39,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:drawableStart="@android:drawable/ic_input_add"
-            android:text="Add"/>
+            android:text="@string/MapAddEvent" />
     </LinearLayout>
 
     <!--GoogleMap fragment-->

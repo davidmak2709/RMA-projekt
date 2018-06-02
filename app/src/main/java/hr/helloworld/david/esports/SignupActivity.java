@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -46,6 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     private Uri selectedImage;
 
     private ProgressDialog dialog;
+    private StorageReference storageReference;
 
 
     private static int RESULT_LOAD_IMAGE = 1;
@@ -182,7 +184,8 @@ public class SignupActivity extends AppCompatActivity {
                         firebaseUser = authResult.getUser();
 
                         FirebaseStorage storage = FirebaseStorage.getInstance();
-                        StorageReference storageReference = storage.getReference();
+                        storageReference = storage.getReference();
+
 
                         if (selectedImage == null)
                             selectedImage = Uri.parse("android.resource://" + SignupActivity.this.getPackageName() + "/mipmap/ic_launcher");
@@ -193,6 +196,13 @@ public class SignupActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                         if (task.isSuccessful()) {
+
+                                            StorageMetadata metadata = new StorageMetadata.Builder()
+                                                    .setCustomMetadata("isThumb", "false").build();
+
+                                            storageReference.child(getResources().getString(R.string.FirebaseStorageProfilePictureFolder)
+                                                    + firebaseUser.getUid()).updateMetadata(metadata);
+
                                             setUserInfo();
                                         } else if (task.getException() != null) {
                                             createUserError(task.getException());

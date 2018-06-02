@@ -49,6 +49,19 @@
     <string name="DetailsGoingUserAlertDialogLabel">Dolaze: </string>
     <string name="DetailsGoingInsertTextHit">Unesite vašu poruku</string>
 
+    <!-- Add Event Activity strings-->
+    <string name="AddEventName">Naziv</string>
+    <string name="AddEventRadius">Radijus geofenca(m)</string>
+    <string name="AddEventDuration">Trajanje geofenca (min)</string>
+    <string name="AddEventNumberOfParticipants">Broj sudionika</string>
+    <string name="AddEventTime">Vrijeme održavanja</string>
+    <string name="AddEventSport">Sport</string>
+    <string name="AddEventTimeError">Ne može u prošlost</string>
+    <string name="AddEventTimeErrorMsg">Pogreška</string>
+
+    <!-- Map Activity strings -->
+    <string name="MapAddEvent">Dodaj event</string>
+
     <!-- Shared Prefs Keys -->
     <string name="userID">userID</string>
     <string name="username">uName</string>

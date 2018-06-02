@@ -1,14 +1,13 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,7 +29,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText searchBar;
     private ListView usersList;
-    private FirebaseUser firebaseUser;
     private User user;
 
 
@@ -39,7 +37,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
             user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
@@ -114,7 +112,7 @@ public class SearchActivity extends AppCompatActivity {
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     ArrayList<String> urls = new ArrayList<>();
                     ArrayList<String> userNames = new ArrayList<>();
                     ArrayList<String> uuid = new ArrayList<>();
@@ -140,7 +138,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });

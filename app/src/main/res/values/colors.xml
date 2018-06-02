@@ -7,6 +7,6 @@
     <color name="colorTextLabel">#000000</color>
     <color name="colorTextLabelGreen">#008f00</color>
     <color name="colorTextLabelRed">#ff0000</color>
-    <color name="background_material_light">#fb6d6c6c</color>
+    <color name="background_material_light">#fbf0eded</color>
     <color name="text_color_primary">#000000</color>
 </resources>

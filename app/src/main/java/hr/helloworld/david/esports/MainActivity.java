@@ -3,6 +3,7 @@ package hr.helloworld.david.esports;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -82,8 +83,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-        startActivity(intent);
+        Intent intent;
+
+        if (item.getItemId() == R.id.nav_map) {
+
+            intent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(intent);
+
+        } else if (item.getItemId() == R.id.action_settings) {
+
+            intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
+
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -93,10 +106,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_map) {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_edit_profile) {
+        if (id == R.id.nav_edit_profile) {
             Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
             startActivity(intent);
 

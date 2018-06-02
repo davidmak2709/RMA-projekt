@@ -5,10 +5,10 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_public_black_24dp"
-            android:title="KARTA GOOGLE" />
+        <!--<item-->
+        <!--&lt;!&ndash;android:id="@+id/nav_map"&ndash;&gt;-->
+        <!--android:icon="@drawable/ic_public_black_24dp"-->
+        <!--android:title="KARTA GOOGLE" />-->
 
     </group>
 
