@@ -3,6 +3,7 @@ package hr.helloworld.david.esports;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseDatabase database=FirebaseDatabase.getInstance();
     private DatabaseReference dbReference=database.getReference("events");
+    protected SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,11 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         RecyclerView rv=findViewById(R.id.listEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
+        llm.setReverseLayout(true);
+        llm.setStackFromEnd(true);
         rv.setLayoutManager(llm);
 
         final ArrayList<Event> events=new ArrayList<>();
@@ -62,6 +67,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                    //testiranje za micanje nepozeljnih vrijednosti
+                    if (snapshot.getValue(Event.class).getOwner().equals("test")){
+                        continue;
+                    }
                     events.add(snapshot.getValue(Event.class));
                 }
                 adapter.notifyDataSetChanged();
@@ -73,6 +82,36 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        swipeContainer=findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                events.clear();
+                dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                            events.add(snapshot.getValue(Event.class));
+                        }
+                        adapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("dbCancelled", databaseError.toString());
+
+                    }
+                });
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
 
     }

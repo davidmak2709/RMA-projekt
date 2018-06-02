@@ -1,5 +1,7 @@
 package hr.helloworld.david.esports;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
@@ -25,6 +28,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
         TextView eventOwner;
         TextView eventTime;
         ImageView eventPhoto;
+        TextView eventTitle;
+        TextView eventGoing;
 
         EventViewHolder(View itemView){
             super(itemView);
@@ -32,7 +37,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
             eventSport=itemView.findViewById(R.id.eventSport);
             eventOwner=itemView.findViewById(R.id.eventOwner);
             eventTime=itemView.findViewById(R.id.eventTime);
-            //eventPhoto=itemView.findViewById(R.id.eventPhoto);
+            eventPhoto=itemView.findViewById(R.id.eventPhoto);
+            eventTitle=itemView.findViewById(R.id.eventTitle);
+            eventGoing=itemView.findViewById(R.id.eventGoing);
         }
     }
 
@@ -49,15 +56,59 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventViewHolder eventViewHolder, int i){
-        eventViewHolder.eventOwner.setText(events.get(i).getNaslov());
+    public void onBindViewHolder(@NonNull final EventViewHolder eventViewHolder, int i){
+        eventViewHolder.eventOwner.setText(events.get(i).getOwner());
         eventViewHolder.eventSport.setText(events.get(i).getSport());
         eventViewHolder.eventTime.setText(events.get(i).getmTime().toString());
-        //eventViewHolder.eventPhoto.setImageResource();
+        eventViewHolder.eventTitle.setText(events.get(i).getNaslov());
+        eventViewHolder.eventGoing.setText(String.format(Locale.getDefault(), "%d/%d", events.get(i).getGooing(), events.get(i).getSize()));
+        switch(events.get(i).getSport().toLowerCase()){
+            case "nogomet":
+                eventViewHolder.eventPhoto.setImageResource(R.drawable.nogomet);
+                break;
+            case "košarka":
+                eventViewHolder.eventPhoto.setImageResource(R.drawable.kosarka);
+                break;
+            case "rukomet":
+                eventViewHolder.eventPhoto.setImageResource(R.drawable.rukomet);
+                break;
+            case "tenis":
+                eventViewHolder.eventPhoto.setImageResource(R.drawable.tenis);
+                break;
+            default:
+                eventViewHolder.eventPhoto.setImageResource(R.drawable.ostalo);
+                break;
+        }
+
+        eventViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context=v.getContext();
+                Intent intent=new Intent(context, DetailsActivity.class);
+                intent.putExtra("id", events.get(eventViewHolder.getAdapterPosition()).getId());
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView){
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public void clear(){
+        events.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Event> list){
+        events.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void deleteItem(int index){
+        events.remove(index);
+        notifyItemRemoved(index);
     }
 }
