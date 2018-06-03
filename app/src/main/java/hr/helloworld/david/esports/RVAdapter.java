@@ -2,6 +2,7 @@ package hr.helloworld.david.esports;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
     private List<Event> events;
+    private Location userLocation;
+    private Location eventLocation=new Location("");
+    private SimpleDateFormat eventTimeFormat=new SimpleDateFormat("E d.M\nHH:mm", Locale.getDefault());
 
     RVAdapter(List<Event> events){
         this.events=events;
@@ -30,6 +36,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
         ImageView eventPhoto;
         TextView eventTitle;
         TextView eventGoing;
+        TextView eventDistance;
+        TextView eventTimeLeft;
 
         EventViewHolder(View itemView){
             super(itemView);
@@ -40,6 +48,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
             eventPhoto=itemView.findViewById(R.id.eventPhoto);
             eventTitle=itemView.findViewById(R.id.eventTitle);
             eventGoing=itemView.findViewById(R.id.eventGoing);
+            eventDistance=itemView.findViewById(R.id.eventDistance);
+            eventTimeLeft=itemView.findViewById(R.id.eventTimeLeft);
         }
     }
 
@@ -57,9 +67,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull final EventViewHolder eventViewHolder, int i){
-        eventViewHolder.eventOwner.setText(events.get(i).getOwner());
+        eventViewHolder.eventOwner.setText(String.format(Locale.getDefault(), "Organizira: %s", events.get(i).getOwner()));
         eventViewHolder.eventSport.setText(events.get(i).getSport());
-        eventViewHolder.eventTime.setText(events.get(i).getmTime().toString());
+        eventViewHolder.eventTime.setText(eventTimeFormat.format(events.get(i).getmTime()));
         eventViewHolder.eventTitle.setText(events.get(i).getNaslov());
         eventViewHolder.eventGoing.setText(String.format(Locale.getDefault(), "%d/%d", events.get(i).getGooing(), events.get(i).getSize()));
         switch(events.get(i).getSport().toLowerCase()){
@@ -79,6 +89,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
                 eventViewHolder.eventPhoto.setImageResource(R.drawable.ostalo);
                 break;
         }
+
+        if (userLocation!=null) {
+            eventLocation.setLatitude(events.get(i).getLat());
+            eventLocation.setLongitude(events.get(i).getLng());
+            float distanceInMeters=userLocation.distanceTo(eventLocation);
+            eventViewHolder.eventDistance.setText(String.format(Locale.getDefault(), "Udaljenost do: %.1f km", distanceInMeters/1000));
+        }
+        else{
+            eventViewHolder.eventDistance.setText("Udaljenost nepoznata");
+        }
+
+        long timeDiff=events.get(i).addMinutesToDate().getTime()-Calendar.getInstance().getTimeInMillis();
+        eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d min", (int)(timeDiff/1000)/60));
 
         eventViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,5 +133,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     public void deleteItem(int index){
         events.remove(index);
         notifyItemRemoved(index);
+    }
+
+    public void setUserLocation(Location userLocation){
+        this.userLocation=userLocation;
+        notifyDataSetChanged();
     }
 }

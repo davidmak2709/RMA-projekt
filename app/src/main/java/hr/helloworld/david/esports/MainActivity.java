@@ -1,8 +1,13 @@
 package hr.helloworld.david.esports;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +24,12 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,18 +40,25 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FirebaseDatabase database=FirebaseDatabase.getInstance();
-    private DatabaseReference dbReference=database.getReference("events");
+    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference dbReference = database.getReference("events");
     protected SwipeRefreshLayout swipeContainer;
+    private ArrayList<Event> events=new ArrayList<>();
+    private RVAdapter adapter=new RVAdapter(events);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startLocationUpdates();
         setTitle(getString(R.string.main_activity_title));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,25 +70,21 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         RecyclerView rv=findViewById(R.id.listEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
         llm.setReverseLayout(true);
         llm.setStackFromEnd(true);
         rv.setLayoutManager(llm);
-
-        final ArrayList<Event> events=new ArrayList<>();
-        final RVAdapter adapter=new RVAdapter(events);
         rv.setAdapter(adapter);
 
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Date currentTime=Calendar.getInstance().getTime();
                 for(DataSnapshot snapshot :dataSnapshot.getChildren()){
-                    //testiranje za micanje nepozeljnih vrijednosti
-                    if (snapshot.getValue(Event.class).getOwner().equals("test")){
+                    /*if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
                         continue;
-                    }
+                    }*/
                     events.add(snapshot.getValue(Event.class));
                 }
                 adapter.notifyDataSetChanged();
@@ -92,7 +106,11 @@ public class MainActivity extends AppCompatActivity
                 dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Date currentTime=Calendar.getInstance().getTime();
                         for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                            /*if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
+                                continue;
+                            }*/
                             events.add(snapshot.getValue(Event.class));
                         }
                         adapter.notifyDataSetChanged();
@@ -189,5 +207,43 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected void startLocationUpdates() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        long UPDATE_INTERVAL = 10 * 1000;
+        long FASTEST_INTERVAL = 2000;
+
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_ACCESS_FINE_LOCATION);
+            return;
+        }
+
+
+        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
+    }
+
+    public void onLocationChanged(Location location) {
+        adapter.setUserLocation(location);
     }
 }

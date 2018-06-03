@@ -170,4 +170,9 @@ public class Event {
                 ", mTime=" + mTime +
                 '}';
     }
+
+    public Date addMinutesToDate(){
+        long curTimeInMs = this.mTime.getTime();
+        return new Date(curTimeInMs + this.mDuration);
+    }
 }
