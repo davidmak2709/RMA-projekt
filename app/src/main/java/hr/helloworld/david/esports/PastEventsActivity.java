@@ -1,28 +1,18 @@
 package hr.helloworld.david.esports;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -30,21 +20,17 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class PastEventsActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -57,20 +43,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_past_events);
         startLocationUpdates();
-        setTitle(getString(R.string.main_activity_title));
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(getString(R.string.activity_past_events_title));
+        Toolbar toolbar = findViewById(R.id.pastEventsToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        RecyclerView rv=findViewById(R.id.listEvents);
+        RecyclerView rv=findViewById(R.id.listPastEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
         llm.setReverseLayout(true);
         llm.setStackFromEnd(true);
@@ -80,9 +60,9 @@ public class MainActivity extends AppCompatActivity
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Date currentTime=Calendar.getInstance().getTime();
+                Date currentTime= Calendar.getInstance().getTime();
                 for(DataSnapshot snapshot :dataSnapshot.getChildren()){
-                    if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
+                    if (snapshot.getValue(Event.class).addMinutesToDate().after(currentTime)){
                         continue;
                     }
                     events.add(snapshot.getValue(Event.class));
@@ -97,7 +77,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        swipeContainer=findViewById(R.id.swipeContainer);
+        swipeContainer=findViewById(R.id.pastSwipeContainer);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -108,7 +88,7 @@ public class MainActivity extends AppCompatActivity
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Date currentTime=Calendar.getInstance().getTime();
                         for(DataSnapshot snapshot :dataSnapshot.getChildren()){
-                            if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
+                            if (snapshot.getValue(Event.class).addMinutesToDate().after(currentTime)){
                                 continue;
                             }
                             events.add(snapshot.getValue(Event.class));
@@ -130,86 +110,6 @@ public class MainActivity extends AppCompatActivity
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View headerView = navigationView.getHeaderView(0);
-        ImageView profilePictureHeader = headerView.findViewById(R.id.userImageMainActivity);
-        TextView usernameHeader = headerView.findViewById(R.id.usernameMainActivity);
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (firebaseUser != null) {
-            Picasso.with(MainActivity.this)
-                    .load(firebaseUser.getPhotoUrl())
-                    .resize(150, 150)
-                    .centerCrop()
-                    .into(profilePictureHeader);
-            usernameHeader.setText(firebaseUser.getDisplayName());
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-        startActivity(intent);
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_map) {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_edit_profile) {
-            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(MainActivity.this, StartActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_friends_list) {
-            Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_past_events) {
-            Intent intent=new Intent(MainActivity.this, PastEventsActivity.class);
-            startActivity(intent);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     protected void startLocationUpdates() {

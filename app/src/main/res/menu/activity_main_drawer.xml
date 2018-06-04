@@ -9,6 +9,10 @@
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_public_black_24dp"
             android:title="KARTA GOOGLE" />
+        <item
+            android:id="@+id/nav_past_events"
+            android:icon="@drawable/fui_done_check_mark"
+            android:title="@string/activity_past_events_title" />
 
     </group>
 

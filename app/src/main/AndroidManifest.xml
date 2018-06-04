@@ -12,7 +12,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,9 +26,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--<meta-data-->
-        <!--android:name="com.facebook.sdk.ApplicationId"-->
-        <!--android:value="@string/facebook_app_id" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ApplicationId" -->
+        <!-- android:value="@string/facebook_app_id" /> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -47,7 +46,9 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".MapActivity"  android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MapActivity"
+            android:theme="@style/AppTheme" />
 
         <receiver
             android:name=".GeofenceBroadcastReciver"
@@ -68,13 +69,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hr.helloworld.david.esports.MapActivity" />
         </activity>
-
         <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".FriendListActivity"/>
+        <activity android:name=".FriendListActivity" />
+        <activity
+            android:name=".PastEventsActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hr.helloworld.david.esports.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

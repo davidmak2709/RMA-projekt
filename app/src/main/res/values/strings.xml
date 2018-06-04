@@ -98,6 +98,7 @@
     <string name="title_activity_details">DetailsActivity</string>
 
     <string name="main_activity_title">News feed</string>
+    <string name="activity_past_events_title">Prošli događaji</string>
 
 
 </resources>
