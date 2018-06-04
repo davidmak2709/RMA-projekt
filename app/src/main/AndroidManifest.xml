@@ -45,7 +45,15 @@
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MapActivity"
             android:theme="@style/AppTheme" />
@@ -81,6 +89,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hr.helloworld.david.esports.MainActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
         </activity>
     </application>
 

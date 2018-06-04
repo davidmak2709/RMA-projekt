@@ -9,23 +9,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
+public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> implements Filterable{
 
     private List<Event> events;
+    private List<Event> eventsFiltered;
     private Location userLocation;
     private Location eventLocation=new Location("");
     private SimpleDateFormat eventTimeFormat=new SimpleDateFormat("E d.M\nHH:mm", Locale.getDefault());
 
     RVAdapter(List<Event> events){
         this.events=events;
+        this.eventsFiltered=events;
     }
 
     static class EventViewHolder extends RecyclerView.ViewHolder{
@@ -55,7 +60,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
     @Override
     public int getItemCount(){
-        return events.size();
+        return eventsFiltered.size();
     }
 
     @NonNull
@@ -67,12 +72,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull final EventViewHolder eventViewHolder, int i){
-        eventViewHolder.eventOwner.setText(String.format(Locale.getDefault(), "Organizira: %s", events.get(i).getOwner()));
-        eventViewHolder.eventSport.setText(events.get(i).getSport());
-        eventViewHolder.eventTime.setText(eventTimeFormat.format(events.get(i).getmTime()));
-        eventViewHolder.eventTitle.setText(events.get(i).getNaslov());
-        eventViewHolder.eventGoing.setText(String.format(Locale.getDefault(), "%d/%d", events.get(i).getGooing(), events.get(i).getSize()));
-        switch(events.get(i).getSport().toLowerCase()){
+        Event event=eventsFiltered.get(i);
+        eventViewHolder.eventOwner.setText(String.format(Locale.getDefault(), "Organizira: %s", event.getOwner()));
+        eventViewHolder.eventSport.setText(event.getSport());
+        eventViewHolder.eventTime.setText(eventTimeFormat.format(event.getmTime()));
+        eventViewHolder.eventTitle.setText(event.getNaslov());
+        eventViewHolder.eventGoing.setText(String.format(Locale.getDefault(), "%d/%d", event.getGooing(), event.getSize()));
+        switch(event.getSport().toLowerCase()){
             case "nogomet":
                 eventViewHolder.eventPhoto.setImageResource(R.drawable.nogomet);
                 break;
@@ -91,8 +97,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
         }
 
         if (userLocation!=null) {
-            eventLocation.setLatitude(events.get(i).getLat());
-            eventLocation.setLongitude(events.get(i).getLng());
+            eventLocation.setLatitude(event.getLat());
+            eventLocation.setLongitude(event.getLng());
             float distanceInMeters=userLocation.distanceTo(eventLocation);
             eventViewHolder.eventDistance.setText(String.format(Locale.getDefault(), "Udaljenost do: %.1f km", distanceInMeters/1000));
         }
@@ -100,7 +106,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
             eventViewHolder.eventDistance.setText("Udaljenost nepoznata");
         }
 
-        long timeDiff=events.get(i).addMinutesToDate().getTime()-Calendar.getInstance().getTimeInMillis();
+        long timeDiff=event.addMinutesToDate().getTime()-Calendar.getInstance().getTimeInMillis();
         if (timeDiff>0) {
             eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d min", (int) (timeDiff / 1000) / 60));
         }
@@ -110,7 +116,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
             public void onClick(View v) {
                 Context context=v.getContext();
                 Intent intent=new Intent(context, DetailsActivity.class);
-                intent.putExtra("id", events.get(eventViewHolder.getAdapterPosition()).getId());
+                intent.putExtra("id", eventsFiltered.get(eventViewHolder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });
@@ -140,5 +146,39 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder>{
     public void setUserLocation(Location userLocation){
         this.userLocation=userLocation;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    eventsFiltered=events;
+                } else {
+                    List<Event> filteredList = new ArrayList<>();
+                    for (Event row : events) {
+                        if (row.getOwner().toLowerCase().contains(charString.toLowerCase()) || row.getSport().toLowerCase().contains(charString.toLowerCase())
+                                || row.getNaslov().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    eventsFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = eventsFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                eventsFiltered = (ArrayList<Event>) filterResults.values;
+
+                notifyDataSetChanged();
+            }
+        };
     }
 }
