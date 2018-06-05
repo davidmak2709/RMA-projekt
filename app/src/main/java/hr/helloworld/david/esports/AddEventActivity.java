@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,17 +13,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends AppCompatActivity implements OnItemSelectedListener {
 
     private TextView editId;
     private TextView editRadius;
@@ -37,8 +39,6 @@ public class AddEventActivity extends AppCompatActivity {
     int mMinute;
 
     private String date_time;
-    private String[] options = {"nogomet", "košarka", "rukomet", "ostalo"};
-    private AlertDialog.Builder builder;
     private DatePickerDialog dialog;
 
     @Override
@@ -47,16 +47,6 @@ public class AddEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_event);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        builder = new AlertDialog.Builder(AddEventActivity.this);
-        builder.setTitle("Odaberi sport");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                editSport.setText(options[which]);
-            }
-        });
-        builder.setCancelable(true);
 
         DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -90,27 +80,7 @@ public class AddEventActivity extends AppCompatActivity {
         editSize = findViewById(R.id.editSize);
         editTime = findViewById(R.id.editTime);
         editSport = findViewById(R.id.editSport);
-
-        editSport.setInputType(InputType.TYPE_NULL);
-        editSport.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    builder.show();
-                }
-            }
-        });
-
-        editSport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder.show();
-            }
-        });
-
-        editSport.setKeyListener(null);
-
-
+        editSport.setVisibility(View.INVISIBLE);
 
         //DATE and TIME pickers
         editTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -131,6 +101,12 @@ public class AddEventActivity extends AppCompatActivity {
 
         editTime.setKeyListener(null);
 
+        Spinner dropdown = findViewById(R.id.spinnerAdd);
+        dropdown.setOnItemSelectedListener(this);
+        String[] items = new String[]{"nogomet", "košarka", "rukomet", "ostalo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -215,6 +191,32 @@ public class AddEventActivity extends AppCompatActivity {
                 }, mHour, mMinute, true);
 
         timePickerDialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        switch (position) {
+            case 0:
+                editSport.setText("nogomet");
+                break;
+            case 1:
+                editSport.setText("košarka");
+                break;
+            case 2:
+                editSport.setText("rukomet");
+                break;
+            case 3:
+                editSport.setVisibility(View.VISIBLE);
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+
     }
 
 }
