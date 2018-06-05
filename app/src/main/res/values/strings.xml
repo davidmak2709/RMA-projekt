@@ -121,5 +121,10 @@
     <string name="title_activity_add_event">AddEventActivity</string>
     <string name="title_activity_details">DetailsActivity</string>
 
+    <string name="main_activity_title">News feed</string>
+    <string name="activity_past_events_title">Prošli događaji</string>
+    <string name="filter_events">Pretraži događaje</string>
+    <string name="search_hint">Pretraži</string>
+
 
 </resources>

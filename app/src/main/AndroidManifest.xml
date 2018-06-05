@@ -28,10 +28,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--<meta-data-->
-        <!--android:name="com.facebook.sdk.ApplicationId"-->
-        <!--android:value="@string/facebook_app_id" />-->
-
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ApplicationId" -->
+        <!-- android:value="@string/facebook_app_id" /> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -48,8 +47,18 @@
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
 
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MapActivity"
+            android:theme="@style/AppTheme" />
         <activity android:name=".MapActivity"  android:theme="@style/AppTheme" />
 
         <receiver
@@ -76,9 +85,22 @@
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".FriendListActivity"/>
+        <activity android:name=".FriendListActivity" />
+        <activity
+            android:name=".PastEventsActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hr.helloworld.david.esports.MainActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
