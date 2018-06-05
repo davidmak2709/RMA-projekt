@@ -1,15 +1,20 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +58,7 @@ public class FriendListActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,12 +74,10 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
-        dialog = findViewById(R.id.progressBar);
-        dialog.setIndeterminate(true);
-        dialog.setVisibility(View.VISIBLE);
+
 
         new GetData().execute();
 
@@ -93,6 +97,15 @@ public class FriendListActivity extends AppCompatActivity {
         private ArrayList<String> UUID = new ArrayList<>();
         private ArrayList<String> urls = new ArrayList<>();
         private ArrayList<String> userNames = new ArrayList<>();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog = findViewById(R.id.progressBar);
+            dialog.setIndeterminate(true);
+            dialog.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Void doInBackground(Void... strings) {
@@ -145,19 +158,23 @@ public class FriendListActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            while (customListView.getUrls().isEmpty() && customListView.getUserNames().isEmpty()
-                    && customListView.getUuid().isEmpty()) {
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    Log.d("TAG", e.getMessage());
-                }
-                
-            }
-
             dialog.setVisibility(View.GONE);
             friendsList.setAdapter(customListView);
+
+            if (friendsList.getCount() == 0) {
+
+                TextView noFriendsError = new TextView(FriendListActivity.this);
+                noFriendsError.setText(getResources().getString(R.string.FriendListActivityZeroFriends));
+                noFriendsError.setGravity(Gravity.CENTER);
+                noFriendsError.setTextSize(18);
+                noFriendsError.setTextColor(getResources().getColor(R.color.com_facebook_button_background_color));
+                noFriendsError.setPaintFlags(noFriendsError.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
+                LinearLayout contentLL = findViewById(R.id.contentLinearLayout);
+                contentLL.removeAllViews();
+                contentLL.addView(noFriendsError);
+            }
         }
     }
 }

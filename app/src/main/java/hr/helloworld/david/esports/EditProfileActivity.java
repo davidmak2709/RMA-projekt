@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,6 +69,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -94,6 +96,23 @@ public class EditProfileActivity extends AppCompatActivity {
                     .resize(250, 250)
                     .into(imageSelector);
         }
+
+        Button resetPassword = findViewById(R.id.resetPasswordButton);
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (firebaseUser.getEmail() != null) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(firebaseUser.getEmail())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(EditProfileActivity.this, "Mail je poslan", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            }
+        });
+
 
         imageSelector.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,9 +209,15 @@ public class EditProfileActivity extends AppCompatActivity {
             imageSelector.setImageURI(selectedImage);
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             selectedImage = data.getData();
-            imageSelector.setImageURI(selectedImage);
+            if (selectedImage != null)
+                imageSelector.setImageURI(selectedImage);
+            else {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imageSelector.setImageBitmap(bitmap);
+            }
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

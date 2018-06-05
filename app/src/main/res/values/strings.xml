@@ -38,6 +38,13 @@
     <string name="EditProfileSaveButtonLabel">Spremi</string>
     <string name="EditProfileEditViewHint">Unesi novi username</string>
 
+    <string name="EditProfileChangeEmail">Promjeni e-mail</string>
+    <string name="EditProfileChangeEmailHint">Za promjenu e-mail računa kliknite na ikonicu</string>
+
+    <string name="EditProfileChangePassword">Promjeni lozinku</string>
+    <string name="EditProfileChangePasswordHint">Za promjenu lozinke računa kliknite na ikonicu</string>
+
+
     <string name="EditProfileNoChanges">Nema promjene</string>
     <string name="EditProfileImageChange">Nova slika spremljena</string>
     <string name="EditProfileUsernameChange">Novi username spremljen</string>
@@ -58,6 +65,9 @@
     <string name="AddEventSport">Sport</string>
     <string name="AddEventTimeError">Ne može u prošlost</string>
     <string name="AddEventTimeErrorMsg">Pogreška</string>
+
+    <!-- Friend List Activity strings-->
+    <string name="FriendListActivityZeroFriends">Nemate prijatelja. Potražite ih!</string>
 
     <!-- Map Activity strings -->
     <string name="MapAddEvent">Dodaj event</string>
