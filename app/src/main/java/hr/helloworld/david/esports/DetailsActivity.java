@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -285,14 +286,15 @@ public class DetailsActivity extends AppCompatActivity {
                      */
 
                     textViewGoingUsers = new TextView(getApplicationContext());
+                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewGoingUsers, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                     textViewGoingUsers.setText(String.valueOf(event.getGooing()));
                     textViewGoingUsers.setTextColor(getResources().getColor(R.color.colorTextLabel));
-                    textViewGoingUsers.setTextSize(72);
+                    textViewGoingUsers.setTextSize(62);
 //                    textViewGoingUsers.setOnClickListener(showGoingUsersList);
 
                     textViewSpace = new TextView(getApplicationContext());
                     textViewSpace.setText("/");
-                    textViewSpace.setTextSize(42);
+                    textViewSpace.setTextSize(32);
 
                     if(event.getGooing() < event.getSize()){
                         textViewGoingUsers.setTextColor(getResources().getColor(R.color.colorTextLabelGreen));
@@ -301,9 +303,10 @@ public class DetailsActivity extends AppCompatActivity {
                     }
 
                     textViewSize = new TextView(getApplicationContext());
+                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewSize, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                     textViewSize.setText(String.valueOf(event.getSize()));
                     textViewSize.setTextColor(getResources().getColor(R.color.colorTextLabel));
-                    textViewSize.setTextSize(32);
+                    textViewSize.setTextSize(22);
 
 
                     goingLinearLayout.setOnClickListener(showGoingUsersList);

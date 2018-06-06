@@ -107,8 +107,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         }
 
         long timeDiff=event.addMinutesToDate().getTime()-Calendar.getInstance().getTimeInMillis();
-        if (timeDiff>0) {
-            eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d min", (int) (timeDiff / 1000) / 60));
+        timeDiff=(int) (timeDiff/1000)/60;
+        if (timeDiff>0 && timeDiff<60) {
+            eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d min", timeDiff));
+        } else if(timeDiff>=60 && timeDiff<1440) {
+            eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d h", (int) timeDiff/60));
+        } else if(timeDiff>=1440 && timeDiff<43800) {
+            eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d dana", (int) timeDiff/1440));
+        } else if(timeDiff>=43800) {
+            eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d mo", (int) timeDiff/43800));
         }
 
         eventViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

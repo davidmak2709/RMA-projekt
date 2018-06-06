@@ -125,6 +125,9 @@
     <string name="activity_past_events_title">Prošli događaji</string>
     <string name="filter_events">Pretraži događaje</string>
     <string name="search_hint">Pretraži</string>
+    <string name="edit_event_range_title">Udaljenost događaja</string>
+    <string name="edit_event_range">Odredite maksimalnu udaljenost događaja na news feed-u</string>
+    <string name="navbar_settings">Postavke</string>
 
 
 </resources>

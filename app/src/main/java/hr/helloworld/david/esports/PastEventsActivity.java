@@ -63,7 +63,7 @@ public class PastEventsActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
 
-        dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbReference.orderByChild("mTime/time").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Date currentTime= Calendar.getInstance().getTime();
@@ -89,7 +89,7 @@ public class PastEventsActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 events.clear();
-                dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                dbReference.orderByChild("mTime/time").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Date currentTime=Calendar.getInstance().getTime();

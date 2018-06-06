@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity
     private SearchView searchView;
     private ArrayList<Event> events=new ArrayList<>();
     private RVAdapter adapter=new RVAdapter(events);
+    private Location userLocation;
+    private Location eventLocation=new Location("");
+    private FirebaseUser firebaseUser;
+    private int userRange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,20 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference dbUserRange = database.getReference("users").child(firebaseUser.getUid()).child("range");
+        dbUserRange.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userRange=dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         RecyclerView rv=findViewById(R.id.listEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
         llm.setReverseLayout(true);
@@ -86,6 +104,14 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Date currentTime=Calendar.getInstance().getTime();
                 for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                    if (userLocation!=null && userRange>0){
+                        eventLocation.setLatitude(snapshot.getValue(Event.class).getLat());
+                        eventLocation.setLongitude(snapshot.getValue(Event.class).getLng());
+                        float distanceInMeters=userLocation.distanceTo(eventLocation);
+                        if ((distanceInMeters/1000)>userRange){
+                            continue;
+                        }
+                    }
                     if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
                         continue;
                     }
@@ -112,6 +138,14 @@ public class MainActivity extends AppCompatActivity
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Date currentTime=Calendar.getInstance().getTime();
                         for(DataSnapshot snapshot :dataSnapshot.getChildren()){
+                            if (userLocation!=null && userRange>0){
+                                eventLocation.setLatitude(snapshot.getValue(Event.class).getLat());
+                                eventLocation.setLongitude(snapshot.getValue(Event.class).getLng());
+                                float distanceInMeters=userLocation.distanceTo(eventLocation);
+                                if ((distanceInMeters/1000)>userRange){
+                                    continue;
+                                }
+                            }
                             if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
                                 continue;
                             }
@@ -240,6 +274,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_past_events) {
             Intent intent=new Intent(MainActivity.this, PastEventsActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_settings) {
+            Intent intent=new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -283,5 +320,6 @@ public class MainActivity extends AppCompatActivity
 
     public void onLocationChanged(Location location) {
         adapter.setUserLocation(location);
+        userLocation=location;
     }
 }

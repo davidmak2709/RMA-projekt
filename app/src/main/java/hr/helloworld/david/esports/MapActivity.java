@@ -557,7 +557,7 @@ public class MapActivity extends AppCompatActivity implements
     private Geofence createGeofence(LatLng latLng, float radius) {
         Log.d(TAG, "createGeofence");
         return new Geofence.Builder()
-                .setRequestId(EVENTS.get(EVENTS.size() - 1).getId())
+                .setRequestId(EVENTS.get(EVENTS.size() - 1).naslov)
                 .setCircularRegion(latLng.latitude, latLng.longitude, radius)
                 .setExpirationDuration(EVENTS.get(EVENTS.size() - 1).getDuration())
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
