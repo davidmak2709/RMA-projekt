@@ -40,6 +40,7 @@ public class User {
         databaseReference.child(this.uuid).child("username").setValue(this.username);
         databaseReference.child(this.uuid).child("searchUsername").setValue(this.username.toLowerCase());
         databaseReference.child(this.uuid).child("email").setValue(this.email);
+        databaseReference.child(this.uuid).child("range").setValue(0);
 
         if(this.photoUrl != null){
             databaseReference.child(this.uuid).child("photoUrl").setValue(photoUrl.toString());

@@ -109,6 +109,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hr.helloworld.david.esports.MainActivity" />
         </activity>
+        <activity
+            android:name=".FriendsFeedActivity"
+            android:label="@string/title_activity_friends_feed"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hr.helloworld.david.esports.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

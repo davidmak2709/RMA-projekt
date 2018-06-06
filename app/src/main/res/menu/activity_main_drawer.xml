@@ -10,6 +10,10 @@
             android:icon="@drawable/ic_public_black_24dp"
             android:title="KARTA GOOGLE" />
         <item
+            android:id="@+id/nav_friend_events"
+            android:icon="@drawable/ic_group_black"
+            android:title="@string/navbar_friends_feed" />
+        <item
             android:id="@+id/nav_past_events"
             android:icon="@drawable/fui_done_check_mark"
             android:title="@string/activity_past_events_title" />
@@ -21,7 +25,7 @@
 
             <item
                 android:id="@+id/nav_friends_list"
-                android:icon="@drawable/ic_group_black"
+                android:icon="@drawable/ic_person_add"
                 android:title="@string/navMenuFriendsString" />
             <item
                 android:id="@+id/action_settings"
