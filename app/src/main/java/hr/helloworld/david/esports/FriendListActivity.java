@@ -34,12 +34,14 @@ public class FriendListActivity extends AppCompatActivity {
     private ListView friendsList;
     private ProgressBar dialog;
     private CustomListView customListView;
+    private FirebaseUser firebaseUser;
+    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser != null){
             user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(),
                     firebaseUser.getPhotoUrl());
@@ -109,7 +111,7 @@ public class FriendListActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... strings) {
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
             Query query = databaseReference.orderByKey();
 
             while (user.friendsUUID.isEmpty()) {
@@ -126,6 +128,7 @@ public class FriendListActivity extends AppCompatActivity {
                 query.equalTo(uuid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             userNames.add(snapshot.child("username").getValue().toString());
                             urls.add(snapshot.child("photoUrl").getValue().toString());
@@ -140,7 +143,7 @@ public class FriendListActivity extends AppCompatActivity {
                 });
             }
 
-            while ((userNames.isEmpty() && urls.isEmpty() && UUID.isEmpty()) && user.numFriends != 0) {
+            while (user.numFriends > UUID.size()) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {

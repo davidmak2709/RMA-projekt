@@ -25,7 +25,7 @@
     <string name="SignUpActivityImageSelectDescription">Click za izbor</string>
 
     <!-- Search Activity strings -->
-    <string name="SearchActivitySearchEditViewHint">Pretraži Esport</string>
+    <string name="SearchActivitySearchEditViewHint">Pretraži prijatelje</string>
 
 
     <!-- Main Activity Drawer strings -->
