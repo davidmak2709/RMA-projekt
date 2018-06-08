@@ -65,6 +65,7 @@ public class User {
     public void getUserFriendsUUID() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
         Query query = databaseReference.child(this.uuid).child("friends");
+        friendsUUID = new ArrayList<>();
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

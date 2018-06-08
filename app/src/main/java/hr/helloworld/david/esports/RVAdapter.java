@@ -6,6 +6,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     private List<Event> eventsFiltered;
     private Location userLocation;
     private Location eventLocation=new Location("");
+    private ArrayList<String> userFriendList;
     private SimpleDateFormat eventTimeFormat=new SimpleDateFormat("E d.M\nHH:mm", Locale.getDefault());
+    private ArrayList<String> friendsGoing=new ArrayList<>();
+    private String setFriendsGoing="Prijatelji koji idu: ";
 
     RVAdapter(List<Event> events){
         this.events=events;
@@ -43,6 +47,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         TextView eventGoing;
         TextView eventDistance;
         TextView eventTimeLeft;
+        TextView eventFriendsGoing;
 
         EventViewHolder(View itemView){
             super(itemView);
@@ -55,6 +60,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventGoing=itemView.findViewById(R.id.eventGoing);
             eventDistance=itemView.findViewById(R.id.eventDistance);
             eventTimeLeft=itemView.findViewById(R.id.eventTimeLeft);
+            eventFriendsGoing=itemView.findViewById(R.id.eventFriendsGoing);
         }
     }
 
@@ -72,6 +78,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull final EventViewHolder eventViewHolder, int i){
+        friendsGoing=new ArrayList<>();
+        setFriendsGoing="Prijatelji koji idu: ";
         Event event=eventsFiltered.get(i);
         eventViewHolder.eventOwner.setText(String.format(Locale.getDefault(), "Organizira: %s", event.getOwner()));
         eventViewHolder.eventSport.setText(event.getSport());
@@ -118,6 +126,27 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventViewHolder.eventTimeLeft.setText(String.format(Locale.getDefault(), "Još %d mo", (int) timeDiff/43800));
         }
 
+        if (!event.getGoingUuid().isEmpty()) {
+            for (String user : event.getGoingUuid()) {
+                if (userFriendList.contains(user) && !friendsGoing.contains(event.getGoingUsername().get(event.getGoingUuid().indexOf(user)))) {
+                    friendsGoing.add(event.getGoingUsername().get(event.getGoingUuid().indexOf(user)));
+                    Log.d("*********", userFriendList.toString());
+                }
+                if (!userFriendList.contains(user) && friendsGoing.contains(event.getGoingUsername().get(event.getGoingUuid().indexOf(user)))) {
+                    friendsGoing.remove(event.getGoingUsername().get(event.getGoingUuid().indexOf(user)));
+                }
+            }
+        }
+        if (friendsGoing.isEmpty()){
+            eventViewHolder.eventFriendsGoing.setText("Prijatelji koji idu: nitko");
+        }
+        else {
+            for (String friend :friendsGoing){
+                setFriendsGoing+=friend+", ";
+            }
+            eventViewHolder.eventFriendsGoing.setText(setFriendsGoing.substring(0, setFriendsGoing.lastIndexOf(",")));
+        }
+
         eventViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +181,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
     public void setUserLocation(Location userLocation){
         this.userLocation=userLocation;
+        notifyDataSetChanged();
+    }
+
+    public void setUserFriendList(ArrayList<String> userFriendList){
+        this.userFriendList=userFriendList;
         notifyDataSetChanged();
     }
 

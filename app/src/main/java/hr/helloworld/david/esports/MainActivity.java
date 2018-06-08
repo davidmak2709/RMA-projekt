@@ -56,11 +56,15 @@ public class MainActivity extends AppCompatActivity
     protected SwipeRefreshLayout swipeContainer;
     private SearchView searchView;
     private ArrayList<Event> events=new ArrayList<>();
+    private Event event;
     private RVAdapter adapter=new RVAdapter(events);
     private Location userLocation;
     private Location eventLocation=new Location("");
-    private FirebaseUser firebaseUser;
+    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private User currentUser=new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
     private int userRange;
+    private ArrayList<String> goingUuid=new ArrayList<>();
+    private ArrayList<String> goingUsername=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbUserRange = database.getReference("users").child(firebaseUser.getUid()).child("range");
         dbUserRange.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,6 +94,9 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        currentUser.getUserFriendsUUID();
+        adapter.setUserFriendList(currentUser.friendsUUID);
 
         RecyclerView rv=findViewById(R.id.listEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
@@ -115,7 +121,16 @@ public class MainActivity extends AppCompatActivity
                     if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
                         continue;
                     }
-                    events.add(snapshot.getValue(Event.class));
+                    for (DataSnapshot goingUser :snapshot.child("goingUsers").getChildren()){
+                        goingUuid.add(goingUser.getKey());
+                        goingUsername.add(goingUser.child("username").getValue(String.class));
+                    }
+                    event=snapshot.getValue(Event.class);
+                    event.setGoingUuid(goingUuid);
+                    event.setGoingUsername(goingUsername);
+                    events.add(event);
+                    goingUuid=new ArrayList<>();
+                    goingUsername=new ArrayList<>();
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -133,6 +148,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onRefresh() {
                 events.clear();
+                currentUser.getUserFriendsUUID();
+                adapter.setUserFriendList(currentUser.friendsUUID);
                 dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -149,7 +166,16 @@ public class MainActivity extends AppCompatActivity
                             if (snapshot.getValue(Event.class).addMinutesToDate().before(currentTime)){
                                 continue;
                             }
-                            events.add(snapshot.getValue(Event.class));
+                            for (DataSnapshot goingUser :snapshot.child("goingUsers").getChildren()){
+                                goingUuid.add(goingUser.getKey());
+                                goingUsername.add(goingUser.child("username").getValue(String.class));
+                            }
+                            event=snapshot.getValue(Event.class);
+                            event.setGoingUuid(goingUuid);
+                            event.setGoingUsername(goingUsername);
+                            events.add(event);
+                            goingUuid=new ArrayList<>();
+                            goingUsername=new ArrayList<>();
                         }
                         adapter.notifyDataSetChanged();
                         swipeContainer.setRefreshing(false);
@@ -175,6 +201,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        currentUser.getUserFriendsUUID();
+        adapter.setUserFriendList(currentUser.friendsUUID);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -238,13 +267,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search) {
-            return true;
-        }
 
-
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_search || super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

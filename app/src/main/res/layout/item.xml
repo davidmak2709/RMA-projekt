@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/eventHolder"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="150dp"
     android:layout_margin="5dp"
     card_view:cardCornerRadius="4dp">
 
@@ -15,11 +15,22 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/eventFriendsGoing"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventSport" />
+
+        <TextView
             android:id="@+id/eventDistance"
             android:layout_width="160dp"
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/eventOwner"
             card_view:layout_constraintStart_toEndOf="@+id/eventSport" />
 
         <TextView
@@ -35,9 +46,10 @@
             android:id="@+id/eventGoing"
             android:layout_width="90dp"
             android:layout_height="20dp"
+            android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:textSize="15sp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventTimeLeft"
             card_view:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
@@ -62,7 +74,7 @@
         <ImageView
             android:id="@+id/eventPhoto"
             android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_height="68dp"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -71,9 +83,10 @@
             android:id="@+id/eventSport"
             android:layout_width="70dp"
             android:layout_height="20dp"
+            android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:textSize="14sp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventPhoto"
             card_view:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -83,9 +96,9 @@
             android:layout_marginStart="8dp"
             android:textAlignment="viewStart"
             android:textSize="30sp"
+            app:autoSizeTextType="uniform"
             card_view:layout_constraintStart_toEndOf="@+id/eventPhoto"
-            card_view:layout_constraintTop_toTopOf="parent"
-            app:autoSizeTextType="uniform" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

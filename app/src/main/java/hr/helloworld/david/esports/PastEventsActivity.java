@@ -25,6 +25,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +46,12 @@ public class PastEventsActivity extends AppCompatActivity {
     protected SwipeRefreshLayout swipeContainer;
     private SearchView searchView;
     private ArrayList<Event> events=new ArrayList<>();
+    private Event event;
     private RVAdapter adapter=new RVAdapter(events);
+    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private User currentUser=new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
+    private ArrayList<String> goingUuid=new ArrayList<>();
+    private ArrayList<String> goingUsername=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,9 @@ public class PastEventsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.pastEventsToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        currentUser.getUserFriendsUUID();
+        adapter.setUserFriendList(currentUser.friendsUUID);
 
         RecyclerView rv=findViewById(R.id.listPastEvents);
         LinearLayoutManager llm=new LinearLayoutManager(this);
@@ -71,7 +81,16 @@ public class PastEventsActivity extends AppCompatActivity {
                     if (snapshot.getValue(Event.class).addMinutesToDate().after(currentTime)){
                         continue;
                     }
-                    events.add(snapshot.getValue(Event.class));
+                    for (DataSnapshot goingUser :snapshot.child("goingUsers").getChildren()){
+                        goingUuid.add(goingUser.getKey());
+                        goingUsername.add(goingUser.child("username").getValue(String.class));
+                    }
+                    event=snapshot.getValue(Event.class);
+                    event.setGoingUuid(goingUuid);
+                    event.setGoingUsername(goingUsername);
+                    events.add(event);
+                    goingUuid=new ArrayList<>();
+                    goingUsername=new ArrayList<>();
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -89,6 +108,8 @@ public class PastEventsActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 events.clear();
+                currentUser.getUserFriendsUUID();
+                adapter.setUserFriendList(currentUser.friendsUUID);
                 dbReference.orderByChild("mTime/time").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -97,7 +118,16 @@ public class PastEventsActivity extends AppCompatActivity {
                             if (snapshot.getValue(Event.class).addMinutesToDate().after(currentTime)){
                                 continue;
                             }
-                            events.add(snapshot.getValue(Event.class));
+                            for (DataSnapshot goingUser :snapshot.child("goingUsers").getChildren()){
+                                goingUuid.add(goingUser.getKey());
+                                goingUsername.add(goingUser.child("username").getValue(String.class));
+                            }
+                            event=snapshot.getValue(Event.class);
+                            event.setGoingUuid(goingUuid);
+                            event.setGoingUsername(goingUsername);
+                            events.add(event);
+                            goingUuid=new ArrayList<>();
+                            goingUsername=new ArrayList<>();
                         }
                         adapter.notifyDataSetChanged();
                         swipeContainer.setRefreshing(false);
@@ -116,6 +146,14 @@ public class PastEventsActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        currentUser.getUserFriendsUUID();
+        adapter.setUserFriendList(currentUser.friendsUUID);
     }
 
     @Override

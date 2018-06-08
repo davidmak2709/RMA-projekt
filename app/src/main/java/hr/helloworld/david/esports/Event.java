@@ -2,6 +2,7 @@ package hr.helloworld.david.esports;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -23,6 +24,8 @@ public class Event {
     private String mSport;
     private String mOwner;
     private Date mTime; //vrijeme eventa
+    private ArrayList<String> goingUuid;
+    private ArrayList<String> goingUsername;
 
     public Event() {
 
@@ -122,6 +125,22 @@ public class Event {
 
     public Date getmTime() {
         return mTime;
+    }
+
+    public void setGoingUuid(ArrayList<String> goingUuid){
+        this.goingUuid=goingUuid;
+    }
+
+    public ArrayList<String> getGoingUuid(){
+        return goingUuid;
+    }
+
+    public void setGoingUsername(ArrayList<String> goingUsername){
+        this.goingUsername=goingUsername;
+    }
+
+    public ArrayList<String> getGoingUsername(){
+        return goingUsername;
     }
 
     public Event(String naslov,String mId, LatLng mLatLng, float mRadius, long mDuration, int mNumId, int mSize, int mGooing, String mSport, String mOwner, Date mTime) {
