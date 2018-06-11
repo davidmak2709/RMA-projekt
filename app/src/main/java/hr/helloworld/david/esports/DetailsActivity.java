@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,6 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarDetailsActivity);
         setSupportActionBar(toolbar);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -314,8 +316,7 @@ public class DetailsActivity extends AppCompatActivity {
                     goingLinearLayout.addView(textViewSpace);
                     goingLinearLayout.addView(textViewSize);
 
-                    //TODO ili neki drugi naziv
-                    toolbar.setTitle(event.getOwner());
+                    toolbar.setTitle(event.getNaslov());
                 }
 
             }

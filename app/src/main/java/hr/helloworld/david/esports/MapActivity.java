@@ -127,7 +127,6 @@ public class MapActivity extends AppCompatActivity implements
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 //čišćenje evenata i geofenceva
-                //todo makovac : problemi s porukama untar events-a
                 removeGeofences();
                 EVENTS.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -193,9 +192,6 @@ public class MapActivity extends AppCompatActivity implements
         // create GoogleApiClient
         createGoogleApi();
 
-        //TODO ucitat sve elemente iz baze i pogenut geofence za svakog do njih, paziti na duplikate !!
-        //TODO za sad radi na principu kada se doda event zadnji event iz liste doda se u geofence (nevalja jer vrijedi samo lokalno)
-        //todo potencijalno rijesenje -> nakon dohvacanja novog bloka izbrisi sve geofence i onda ih opet pokreni za sve elemente
     }
 
     @Override
@@ -424,9 +420,8 @@ public class MapActivity extends AppCompatActivity implements
     private LocationRequest locationRequest;
     // Defined in mili seconds.
     // This number in extremely low, and should be used only for debug
-    // todo povecaj prije pustanja live
-    private final int UPDATE_INTERVAL = 1000; // * 60 * 3;
-    private final int FASTEST_INTERVAL = 1000; //* 30;
+    private final int UPDATE_INTERVAL = 5000; // * 60 * 3;
+    private final int FASTEST_INTERVAL = 5000; //* 30;
 
     // Start location Updates
     private void startLocationUpdates() {
@@ -709,8 +704,6 @@ public class MapActivity extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         filterOff = Boolean.FALSE;
         Log.d("**** ", "filter ON");
-        //TODO problem identičnog stringa Košarka != košarka :(
-        //todo doadti opcij SVE
         switch (position) {
             case 0:
                 sportPick = "all";

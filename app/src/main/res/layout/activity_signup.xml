@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     android:orientation="vertical"
-    android:background="@android:color/darker_gray"
     tools:context="hr.helloworld.david.esports.SignupActivity">
 
     <LinearLayout
