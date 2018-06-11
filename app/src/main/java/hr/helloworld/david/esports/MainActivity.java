@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 
         if (firebaseUser != null) {
             Picasso.with(MainActivity.this)
-                    .load(firebaseUser.getPhotoUrl())
+                    .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString())
                     .resize(200, 250)
                     .centerCrop()
                     .into(profilePictureHeader);
