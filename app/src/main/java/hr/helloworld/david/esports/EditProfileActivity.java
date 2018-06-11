@@ -310,6 +310,7 @@ public class EditProfileActivity extends AppCompatActivity {
             profileUpdates.setPhotoUri(retUri);
             firebaseUser.updateProfile(profileUpdates.build());
             User.updateUserImage(firebaseUser.getUid(), retUri);
+            selectedImage = null;
         }
 
         @Override
