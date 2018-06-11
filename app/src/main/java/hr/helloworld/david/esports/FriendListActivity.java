@@ -1,8 +1,6 @@
 package hr.helloworld.david.esports;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -34,14 +32,12 @@ public class FriendListActivity extends AppCompatActivity {
     private ListView friendsList;
     private ProgressBar dialog;
     private CustomListView customListView;
-    private FirebaseUser firebaseUser;
-    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser != null){
             user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(),
                     firebaseUser.getPhotoUrl());
@@ -170,8 +166,8 @@ public class FriendListActivity extends AppCompatActivity {
                 noFriendsError.setText(getResources().getString(R.string.FriendListActivityZeroFriends));
                 noFriendsError.setGravity(Gravity.CENTER);
                 noFriendsError.setTextSize(18);
-                noFriendsError.setTextColor(getResources().getColor(R.color.com_facebook_button_background_color));
-                noFriendsError.setPaintFlags(noFriendsError.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                noFriendsError.setTextColor(getResources().getColor(R.color.colorAccent));
+//                noFriendsError.setPaintFlags(noFriendsError.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
                 LinearLayout contentLL = findViewById(R.id.contentLinearLayout);

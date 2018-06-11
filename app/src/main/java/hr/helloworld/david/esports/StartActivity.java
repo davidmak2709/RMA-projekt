@@ -13,15 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
-
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.internal.CallbackManagerImpl;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,14 +43,14 @@ public class StartActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private CallbackManager callbackManager;
+//    private CallbackManager callbackManager;
 
     private View.OnClickListener sendMailListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+//        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_start);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -114,25 +105,6 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton facebookButton = findViewById(R.id.StartActivityFacebookButton);
-        facebookButton.setReadPermissions("email", "public_profile");
-        facebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                String e = "Failed to login. " + error.getMessage();
-                Toast.makeText(StartActivity.this, e, Toast.LENGTH_LONG).show();
-            }
-        });
 
     }
 
@@ -150,8 +122,6 @@ public class StartActivity extends AppCompatActivity {
                 Log.w(GOOGLE_TAG, "Google sign in failed" + e.getMessage());
 
             }
-        } else if (CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode() == requestCode) {
-            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -277,32 +247,5 @@ public class StartActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        firebaseUser = firebaseAuth.getCurrentUser();
-                        if (task.isSuccessful() && firebaseUser != null) {
-
-
-                            User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
-                                    firebaseUser.getEmail(), firebaseUser.getPhotoUrl());
-
-                            user.saveNewUser();
-
-                            Intent intent = new Intent(StartActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(StartActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
 
 }

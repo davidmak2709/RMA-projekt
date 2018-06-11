@@ -108,12 +108,12 @@
                 android:layout_height="10dp"
                 />
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/StartActivityFacebookButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/com_facebook_button_background"
-                android:drawableLeft="@drawable/com_facebook_button_icon"/>
+            <!--<com.facebook.login.widget.LoginButton-->
+            <!--android:id="@+id/StartActivityFacebookButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/com_facebook_button_background"-->
+            <!--android:drawableLeft="@drawable/com_facebook_button_icon"/>-->
 
         </LinearLayout>
 
